@@ -1,0 +1,13 @@
+Package: stlcgl
+Title: A dash component for clustergrammer gl
+Version: 0.0.1
+Description: A dash component for clustergrammer gl
+Depends: R (>= 3.0.2)
+Imports: 
+Suggests: 
+License: MIT + file LICENSE
+URL: 
+BugReports: 
+Encoding: UTF-8
+LazyData: true
+KeepSource: true

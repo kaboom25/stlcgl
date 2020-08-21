@@ -1,0 +1,7 @@
+include stlcgl/stlcgl.min.js
+include stlcgl/stlcgl.min.js.map
+include stlcgl/metadata.json
+include stlcgl/package-info.json
+include README.md
+include LICENSE
+include package.json
