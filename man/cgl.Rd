@@ -6,19 +6,22 @@
 \title{Cgl component}
 
 \description{
-ExampleComponent is an example component. It takes a property, `label`, and displays it. It renders an input with the property `value` which is editable by the user.
+
 }
 
 \usage{
-cgl(id=NULL, label=NULL, value=NULL)
+cgl(id=NULL, label=NULL, value=NULL, network=NULL)
 }
 
 \arguments{
 \item{id}{Character. The ID used to identify this component in Dash callbacks.}
 
-\item{label}{Character. A label that will be printed when this component is rendered.}
+\item{label}{Character. }
 
-\item{value}{Character. The value displayed in the input.}
+\item{value}{Unnamed list. }
+
+\item{network}{Character. added by Phillip
+stringified clustergrammer-gl network object}
 }
 
 \value{named list of JSON elements corresponding to React.js properties and their values}

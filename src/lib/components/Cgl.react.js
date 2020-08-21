@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import CGM from '../clustergrammerGL/clustergrammer-gl.node'
 
 /**
  * ExampleComponent is an example component.
@@ -8,28 +9,87 @@ import PropTypes from 'prop-types';
  * It renders an input with the property `value`
  * which is editable by the user.
  */
+var cgm = null;
 export default class Cgl extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { value: [] }
+    }
+
+    componentDidMount() {
+        //callbacks
+        //called when user clicks on trapezoids.
+        const my_dendro_click_callback = function () {
+            if (cgm != null) {
+                //emit event that says dendro was clicked
+                let selectionEvent = new CustomEvent('cluster_selection', { detail: cgm.params.dendro.selected_clust_names })
+                document.getElementById(cgm.args.reactComp.props.id).dispatchEvent(selectionEvent)
+            }
+        };
+
+        //listener for dendro_click event
+        document.getElementById(this.props.id).addEventListener('cluster_selection',e =>
+            {
+                // this.setState({ value: e.detail })
+                this.props.setProps({ value: e.detail})
+                console.log('selected: ' + e.detail)
+            }
+        )
+
+
+
+        const inst_container = document.getElementById(this.props.id);
+        const inst_height = 900;
+        const inst_width = 900;
+        const network = JSON.parse(this.props.network)
+        // hardwire manual category
+        // network.manual_category = {}
+        // network.manual_category.col = 'Cell Type'
+        // network.manual_category.col_cats = [
+        //     {
+        //         'name':'Cat',
+        //         'color':'red'
+        //     },
+        //     {
+        //         'name': 'Dog',
+        //         'color': 'yellow'
+        //     },
+        //     {
+        //         'name': 'Shark',
+        //         'color': 'black'
+        //     },
+        //     {
+        //         'name': 'Snake',
+        //         'color': 'blue'
+        //     },
+        //     {
+        //         'name': 'Lizard',
+        //         'color': 'green'
+        //     }
+        // ]
+
+        // set matrix colors
+        network.matrix_colors = {}
+        network.matrix_colors.pos = 'red'
+        network.matrix_colors.neg = 'blue'
+        let args = {}
+        args.network = network;
+        args.container=inst_container;
+        args.viz_width=inst_width;
+        args.viz_height=inst_height;
+        args.reactComp=this;
+        args.dendro_click_callback = my_dendro_click_callback
+
+        cgm = CGM(args);
+
+    }
+
     render() {
-        const {id, label, setProps, value} = this.props;
 
         return (
-            <div id={id}>
-                ExampleComponent: {label}&nbsp;
-                <input
-                    value={value}
-                    onChange={
-                        /*
-                         * Send the new value to the parent component.
-                         * setProps is a prop that is automatically supplied
-                         * by dash's front-end ("dash-renderer").
-                         * In a Dash app, this will update the component's
-                         * props and send the data back to the Python Dash
-                         * app server if a callback uses the modified prop as
-                         * Input or State.
-                         */
-                        e => setProps({ value: e.target.value })
-                    }
-                />
+            <div>
+                <div id={this.props.id}>
+                </div>
             </div>
         );
     }
@@ -43,15 +103,15 @@ Cgl.propTypes = {
      */
     id: PropTypes.string,
 
-    /**
-     * A label that will be printed when this component is rendered.
-     */
-    label: PropTypes.string.isRequired,
+    label: PropTypes.string,
+
+    value: PropTypes.array,
 
     /**
-     * The value displayed in the input.
+     * added by Phillip
+     * stringified clustergrammer-gl network object
      */
-    value: PropTypes.string,
+    network: PropTypes.string.isRequired,
 
     /**
      * Dash-assigned callback that should be called to report property changes

@@ -1,17 +1,20 @@
 import stlcgl
+import json
 import dash
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import dash_html_components as html
 
 app = dash.Dash(__name__)
 
+with open('./mult_view.json') as data:
+    dataString = data.read()
+
 app.layout = html.Div([
+    html.Div(id='output'),
     stlcgl.Cgl(
         id='input',
-        value='my-value',
-        label='my-label'
+        network=dataString
     ),
-    html.Div(id='output')
 ])
 
 
@@ -21,4 +24,4 @@ def display_output(value):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=True, port=5000)

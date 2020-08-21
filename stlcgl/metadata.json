@@ -1,6 +1,6 @@
 {
   "src/lib/components/Cgl.react.js": {
-    "description": "ExampleComponent is an example component.\nIt takes a property, `label`, and\ndisplays it.\nIt renders an input with the property `value`\nwhich is editable by the user.",
+    "description": "",
     "displayName": "Cgl",
     "methods": [],
     "props": {
@@ -15,15 +15,22 @@
         "type": {
           "name": "string"
         },
-        "required": true,
-        "description": "A label that will be printed when this component is rendered."
+        "required": false,
+        "description": ""
       },
       "value": {
         "type": {
-          "name": "string"
+          "name": "array"
         },
         "required": false,
-        "description": "The value displayed in the input."
+        "description": ""
+      },
+      "network": {
+        "type": {
+          "name": "string"
+        },
+        "required": true,
+        "description": "added by Phillip\nstringified clustergrammer-gl network object"
       },
       "setProps": {
         "type": {

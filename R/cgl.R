@@ -1,8 +1,8 @@
 # AUTO GENERATED FILE - DO NOT EDIT
 
-cgl <- function(id=NULL, label=NULL, value=NULL) {
+cgl <- function(id=NULL, label=NULL, value=NULL, network=NULL) {
     
-    props <- list(id=id, label=label, value=value)
+    props <- list(id=id, label=label, value=value, network=network)
     if (length(props) > 0) {
         props <- props[!vapply(props, is.null, logical(1))]
     }
@@ -10,7 +10,7 @@ cgl <- function(id=NULL, label=NULL, value=NULL) {
         props = props,
         type = 'Cgl',
         namespace = 'stlcgl',
-        propNames = c('id', 'label', 'value'),
+        propNames = c('id', 'label', 'value', 'network'),
         package = 'stlcgl'
         )
 
