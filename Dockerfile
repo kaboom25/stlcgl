@@ -1,7 +1,12 @@
-FROM python:alpine3.6
+FROM python:3.6
 COPY . /stlcgl
-WORKDIR /stlcgl
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
-EXPOSE 5000
-CMD python ./usage2.py
+
+RUN pip3 install virtualenv
+RUN cd /stlcgl && virtualenv -p python3 env
+RUN cd /stlcgl && \
+    . env/bin/activate && \
+    pip3 install -r requirements2.txt
+
+EXPOSE 8052
+
+CMD ["python3", "usage2.py"]
