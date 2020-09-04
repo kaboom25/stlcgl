@@ -56,7 +56,7 @@ loadFile = LoadFile()
 searchQuery = SearchQuery()
 rand_score = adjusted_rand_score
 
-thingy = dash.Dash()
+thingy = dash.Dash(__name__)
 
 external_scripts = [
     {'src': 'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'},
@@ -322,9 +322,6 @@ app.layout = html.Div([
                 [
                     dcc.Loading(id="loading-2", children=[
                         html.Div(
-                            id='heatmap_selected'
-                        ),
-                        html.Div(
                             id='heatmap',
                             className='row twelve columns',
                             style={'position': 'relative', 'right': '15px',
@@ -490,7 +487,7 @@ def download_csv():
 def make_clustergram(total_lsm, total_sim, total_cell, total_concent, total_time, delimit_final, link):
     arrays_rows = arrays_columns = [np.array(total_lsm),  # Row headers
 
-                                    np.array(total_sim),  # Category 1
+                                    #np.array(total_sim),  # Category 1
                                     np.array(total_cell),  # Category 2
                                     np.array(total_concent),  # Category 2
                                     np.array(total_time)]  # Category 3
@@ -604,9 +601,14 @@ def submitGeneToIlincsMethod(gene_name, link, topConcordance, input_df):
     # cgram_obj = make_clustergram(total_lsm, total_concordance, total_cell, total_concent, total_time,
     #                              distance_list,
     #                              link)  # replace lsms with comp names
+
+    # removed concordance
     cgram_obj = make_clustergram(total_lsm, total_concordance, total_cell, total_concent, total_time,
                                  distance_list,
                                  link)  # replace lsms with comp names
+    # cgram_obj = make_clustergram(total_lsm, total_concordance, total_cell, total_concent, total_time,
+    #                              distance_list,
+    #                              link)  # replace lsms with comp names
 
     X = cgram_obj['mat']
     X_embedded_tsne = TSNE(n_components=3, perplexity=100.0, early_exaggeration=12.0,
@@ -943,16 +945,28 @@ def update_cgrammer(input_obj):
 
     fig = [
         stlcgl.Cgl(
-            id='cgram-component' + str(len_mat),
+            id='cgram-component',
             network=json.dumps(network_data)
         ),
         # html.Hr([], style={'height': '1px', 'color': 'steelBlue', 'border': 'none', 'color': 'steelBlue',
         #                    'background-color': 'steelBlue', 'marginTop':'40px'}),
         # html.H6('This Heatmap is Generated with {} LINCS Compounds And {} Input Compounds'.format(num_compounds, len(input_df))),
     ]
+    print('ret' + json.dumps(network_data))
     return fig
 
+@app.callback(Output('lsm_dropdown', 'value'), [Input('cgram-component', 'value')])
+def cgl_selected_to_lsm_dropdown(selected):
+    ret = ''
+    if selected is not None:
+        for item in selected.split(','):
+            ret += item[:item.index('-', 4)] + ','
+        ret = ret[:-1]
 
+    print(ret)
+    return ret
+
+#intermediate-value --> post-process
 @app.callback(Output('post-process', 'children'),
               [Input('intermediate-value', 'children')])
 def update_post_process(input_obj):
@@ -1180,14 +1194,6 @@ def update_post_process(input_obj):
     ]
 
     return fig
-
-
-@app.callback(Output('lsm_dropdown', 'value'),
-              [Input('cgram-component', 'value')])
-def set_lsmdropdown(selected_compounds):
-    selected_compounds = selected_compounds.split(',')
-    return 'LSM-43094'
-
 
 @app.callback(Output('tabs-content-inline', 'children'),
               [Input('tabs-styled-with-inline', 'value')
@@ -1433,6 +1439,7 @@ def show_lsm_table(chem_dropdown_values, input_obj):
 
             return fig
         except:
+            print('table failed')
             return
     else:
         return

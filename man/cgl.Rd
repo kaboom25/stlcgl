@@ -18,7 +18,7 @@ cgl(id=NULL, label=NULL, value=NULL, network=NULL)
 
 \item{label}{Character. }
 
-\item{value}{Unnamed list. }
+\item{value}{Character. }
 
 \item{network}{Character. added by Phillip
 stringified clustergrammer-gl network object}

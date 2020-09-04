@@ -13,7 +13,7 @@ app.layout = html.Div([
     html.Div(id='output'),
     stlcgl.Cgl(
         id='input',
-        network=dataString
+        network=''
     ),
 ])
 
@@ -22,6 +22,9 @@ app.layout = html.Div([
 def display_output(value):
     return 'You have entered {}'.format(value)
 
+@app.callback(Output('input', 'network'), [Input('output', 'children')])
+def change_network(kdjslf):
+    return dataString
 
 if __name__ == '__main__':
     app.run_server(debug=True, port=5000)

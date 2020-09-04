@@ -2,7 +2,15 @@
   "src/lib/components/Cgl.react.js": {
     "description": "",
     "displayName": "Cgl",
-    "methods": [],
+    "methods": [
+      {
+        "name": "createHeatmap",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      }
+    ],
     "props": {
       "id": {
         "type": {
@@ -20,7 +28,7 @@
       },
       "value": {
         "type": {
-          "name": "array"
+          "name": "string"
         },
         "required": false,
         "description": ""

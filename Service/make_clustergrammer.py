@@ -72,6 +72,6 @@ class LoadFile:
     #             False, run_clustering=True)
 
     # write jsons for front-end visualizations
-    # net.write_json_to_file('viz', '../static/clustergrammer/mult_view.json', 'indent')
+    # net.write_json_to_file('viz', '../static/clustergrammer/mult_view.js', 'indent')
     # net.write_json_to_file('sim_row', '../static/clustergrammer/mult_view_sim_row.json', 'no-indent')
     # net.write_json_to_file('sim_col', '../static/clustergrammer/mult_view_sim_col.json', 'no-indent')

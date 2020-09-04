@@ -67118,6 +67118,10 @@ module.exports = function calc_cat_cluster_breakdown(params, inst_data, inst_rc)
 
       if (params.viz.cat_info[inst_rc][cat_index].type === 'cat_strings'){
         type_name = params.viz.cat_names[inst_rc][cat_index];
+
+        console.log('          type_name')
+          console.log(type_name)
+
         cat_types_names.push(type_name);
         cat_types_index.push(cat_index);
       } else {
@@ -67149,7 +67153,8 @@ module.exports = function calc_cat_cluster_breakdown(params, inst_data, inst_rc)
     } else {
       no_title_given = false;
     }
-
+    console.log('    cat_types_index')
+      console.log(cat_types_index)
     if (cat_types_names.length > 0){
 
       // 3: count instances of each category name for each category-type
@@ -67281,6 +67286,9 @@ module.exports = function cat_breakdown_bars(params, cat_data, cat_graph_group,
   var max_len = 25;
 
   var max_bar_value = cat_data.bar_data[0][bars_index];
+
+  console.log('             cat_data ')
+    console.log(cat_data)
 
   var i_title = cat_data.type_name;
   if (i_title.length >= max_len){
@@ -67605,8 +67613,14 @@ module.exports = function generate_cat_array(params, inst_axis){
 
       // generate titles from cat info
       tmp_cat = check_node[inst_prop];
+      //
+      // console.log('tmp_cat')
+      //   console.log(tmp_cat)
 
       cat_index = parseInt(inst_prop.split('cat-')[1], 10);
+
+      // console.log('inst_prop')
+      //   console.log(inst_prop)
 
       // use given title
       if (tmp_cat.indexOf(title_sep) >=0){
@@ -67618,11 +67632,17 @@ module.exports = function generate_cat_array(params, inst_axis){
       // current_cats.push(tmp_title);
 
       current_cats[cat_index] = tmp_title;
+
+      console.log('-----update cats---------')
+        console.log(tmp_title)
     }
 
   });
 
   var all_index = _.keys(current_cats).sort();
+
+  console.log('cur cats')
+    console.log(current_cats)
 
   var inst_data;
   _.each(all_index, function(inst_index){
@@ -67632,7 +67652,17 @@ module.exports = function generate_cat_array(params, inst_axis){
     inst_data.cats = [];
 
     cat_data.push(inst_data);
+
+    console.log('  inst_index')
+    console.log(inst_index)
+
+      console.log('   inst data')
+    console.log(current_cats)
+
   });
+
+  console.log('cat_data')
+    console.log(cat_data)
 
 
   return cat_data;
@@ -67684,6 +67714,9 @@ module.exports = function generate_cat_info(params){
 
     tmp_keys = tmp_keys.sort();
 
+    console.log('tmp_keys')
+      console.log(tmp_keys)
+
     _.each( tmp_keys, function(d){
       if (d.indexOf('cat-') >= 0){
         viz.show_categories[i_rc] = true;
@@ -67699,6 +67732,9 @@ module.exports = function generate_cat_info(params){
     _.each( viz.all_cats[i_rc], function(cat_title){
 
       var i_node = params.network[i_rc+'_nodes'][0];
+
+      console.log('i_node')
+      console.log(i_node)
 
       // look for title of category in category name
       if (typeof i_node[cat_title] === 'string' ){
@@ -67725,6 +67761,9 @@ module.exports = function generate_cat_info(params){
         } else {
           new_cat = i_cat;
         }
+
+        console.log('new_cat')
+      console.log(new_cat)
 
         cat_instances.push(new_cat);
       });

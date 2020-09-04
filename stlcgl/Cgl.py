@@ -10,7 +10,7 @@ class Cgl(Component):
 Keyword arguments:
 - id (string; optional): The ID used to identify this component in Dash callbacks.
 - label (string; optional)
-- value (list; optional)
+- value (string; optional)
 - network (string; required): added by Phillip
 stringified clustergrammer-gl network object"""
     @_explicitize_args
