@@ -7,7 +7,8 @@ or by getting the code from the repo:
 https://github.com/MaayanLab/clustergrammer-py
 '''
 
-from clustergrammer import Network
+import clustergrammer_static
+from clustergrammer_static.clustergrammer import Network
 
 net = Network()
 
