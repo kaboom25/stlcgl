@@ -749,8 +749,8 @@ def add_markers(figure_data, molecules, plot_type='scatter3d'):
             x=[drug_data['x'][point_number]],
             y=[drug_data['y'][point_number]],
             marker=dict(
-                color='blue',
-                size=16,
+                color='black',
+                size=10,
                 opacity=0.6,
                 symbol='crosscross'
             ),
@@ -1308,17 +1308,15 @@ def make_dash_table(selection):
         table.append(html.Tr(html_row))
     return table
 
-
 @app.callback(
     Output('lsm_table', 'children'),
     [Input('lsm_dropdown', 'value'),
      Input('intermediate-value', 'children')])
 def show_lsm_table(chem_dropdown_values, input_obj):
     if chem_dropdown_values is not None:
-
         #try:
             fig = []
-            for item in chem_dropdown_values.split(','):
+            for item in chem_dropdown_values.split(',')[:5]:
                 lsm = item
                 if(lsm != ''):
                     print('lsm')
@@ -1353,7 +1351,7 @@ def show_lsm_table(chem_dropdown_values, input_obj):
                                      style={'display': 'inline-block', 'verticalAlign': 'middle', 'marginLeft': '10px'}))
                     if data2[0]['clueIoCompound']:
                         c1.append(html.Br())
-                        c1.append(html.P("{data2[0]['clueIoCompound']}"))
+                        c1.append(html.P(str(data2[0]['clueIoCompound'])))
 
                     img_src = "http://life.ccs.miami.edu/life/web/images/sm-images/400/{}.png".format(lsm)
                     print(img_src)
@@ -1487,7 +1485,7 @@ def highlight_molecule(chem_dropdown_values, input_obj):
     # print "tsne"
     # print X_embedded
     # print X_embedded.shape
-    FIGURE = scatter_plot_3d(markers=chem_dropdown_values, plot_type='scatter3d', x=tsne_x, y=tsne_y,
+    FIGURE = scatter_plot_3d(markers=chem_dropdown_values.split(',')[:5], plot_type='scatter3d', x=tsne_x, y=tsne_y,
                              z=tsne_z, cp=lsm_df)
 
     return FIGURE
