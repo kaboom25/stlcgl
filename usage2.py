@@ -263,11 +263,11 @@ app.layout = html.Div([
                         , html.A(id='download-link2', children='   Download An Example', href="/dash/urlToDownload")
                     ], style={'marginLeft': '10px', 'display': 'inline-block'}),
 
-                     #dcc.Dropdown(id='chem_dropdown3',
-                      #            multi=True,
-                       #           value=[STARTING_DRUG],
-                        #          options=[{'label': i, 'value': i} for i in df['GeneName']]
-                         #         ),
+                    # dcc.Dropdown(id='chem_dropdown3',
+                    #            multi=True,
+                    #           value=[STARTING_DRUG],
+                    #          options=[{'label': i, 'value': i} for i in df['GeneName']]
+                    #         ),
                     html.Div([
                         dcc.Upload(
                             id='upload-data',
@@ -327,8 +327,8 @@ app.layout = html.Div([
                             style={'position': 'relative', 'right': '15px',
                                    'margin': '10px', 'padding': '10px'}
                         )
-                    ],type="circle"
-                    )
+                    ], type="circle"
+                                )
                 ],
                 style={'height': '1200px', 'width': '900px'}
             )
@@ -342,18 +342,18 @@ app.layout = html.Div([
 
             # , html.Div(id='heatmap', className='row twelve columns', style={'position': 'relative', 'right': '15px','paddingBottom':'100px','marginBottom':'100px'})
             , html.Div([
-                  html.Div([
-                      html.Div([
+                html.Div([
+                    html.Div([
 
-                          html.P('Copy and Paste The Selected Compounds for Further Analysis.')
-                      ], style={'margin-left': '10px'}),
-                      #dcc.Dropdown(id='chem_dropdown',
-                      #             multi=True,
-                      #             value=[STARTING_DRUG],
-                      #             options=[{'label': i, 'value': i} for i in df['GeneName']]),
-                  ], className='twelve columns')
+                        html.P('Copy and Paste The Selected Compounds for Further Analysis.')
+                    ], style={'marginLeft': '10px'}),
+                    # dcc.Dropdown(id='chem_dropdown',
+                    #             multi=True,
+                    #             value=[STARTING_DRUG],
+                    #             options=[{'label': i, 'value': i} for i in df['GeneName']]),
+                ], className='twelve columns')
 
-             ], className='row')
+            ], className='row')
         ], className='ten columns offset-by-one', style={'backgroundColor': 'white'})
     ], className='twelve columns', style={'backgroundColor': 'white', 'paddingBottom': '20px', 'minHeight': '100%'}
 
@@ -487,7 +487,7 @@ def download_csv():
 def make_clustergram(total_lsm, total_sim, total_cell, total_concent, total_time, delimit_final, link):
     arrays_rows = arrays_columns = [np.array(total_lsm),  # Row headers
 
-                                    #np.array(total_sim),  # Category 1
+                                    # np.array(total_sim),  # Category 1
                                     np.array(total_cell),  # Category 2
                                     np.array(total_concent),  # Category 2
                                     np.array(total_time)]  # Category 3
@@ -537,7 +537,7 @@ def submitGeneToIlincsMethod(gene_name, link, topConcordance, input_df):
     total_time = []
     final_distance_list = []
 
-    #print(gene_data)
+    # print(gene_data)
     for item in gene_data:
         sigid.append(str(item['signatureid']))
 
@@ -580,7 +580,7 @@ def submitGeneToIlincsMethod(gene_name, link, topConcordance, input_df):
     distance_list = searchQuery.report_matrix(','.join(lsm_sublist), ','.join(concordance_sublist), topConcordance,
                                               input_df)
     for item in list_of_concordance:
-        #print(item)
+        # print(item)
 
         total_lsm.append('Compound: ' + item[1])
         total_comp_names.append(item[2])
@@ -690,7 +690,7 @@ def parse_contents(contents, filename, date):
             # selected_rows=[],
             # page_action="native",
             # page_current=0,
-            # page_size=10,
+            page_size=10,
 
             style_cell={'textAlign': 'left'},
             style_header={
@@ -885,7 +885,7 @@ def scatter_plot_3d(
                State('upload-data', 'last_modified')])
 def make_network_obj(list_of_contents, gene, num_compounds, list_of_names, list_of_dates):
     # num_compounds = 10
-    if gene is not '':
+    if gene != '':
         input_df = []
         if list_of_contents is not None:
             df = [parse_file(c, n) for c, n in zip(list_of_contents, list_of_names)]
@@ -903,6 +903,7 @@ def make_network_obj(list_of_contents, gene, num_compounds, list_of_names, list_
         # print('set net_obj: ' + network_obj)
         return network_obj
 
+
 @app.callback(Output('heatmap', 'children'),
               [Input('intermediate-value', 'children')])
 def update_cgrammer(input_obj):
@@ -910,7 +911,6 @@ def update_cgrammer(input_obj):
     # print('inobj' + input_obj)
 
     network_obj = json.loads(input_obj)
-
 
     # print(str(network_obj))
     # print("netobj " + str(type(network_obj)))
@@ -949,8 +949,9 @@ def update_cgrammer(input_obj):
         #                    'background-color': 'steelBlue', 'marginTop':'40px'}),
         # html.H6('This Heatmap is Generated with {} LINCS Compounds And {} Input Compounds'.format(num_compounds, len(input_df))),
     ]
-    #print('ret' + json.dumps(network_data))
+    # print('ret' + json.dumps(network_data))
     return fig
+
 
 @app.callback(Output('lsm_dropdown', 'value'), [Input('cgram-component', 'value')])
 def cgl_selected_to_lsm_dropdown(selected):
@@ -960,10 +961,11 @@ def cgl_selected_to_lsm_dropdown(selected):
             ret += item[:item.index('-', 4)] + ','
         ret = ret[:-1]
 
-    #print(ret)
+    # print(ret)
     return ret
 
-#intermediate-value --> post-process
+
+# intermediate-value --> post-process
 @app.callback(Output('post-process', 'children'),
               [Input('intermediate-value', 'children')])
 def update_post_process(input_obj):
@@ -1040,7 +1042,7 @@ def update_post_process(input_obj):
                          multi=True,
                          value="",
                          options=[{'label': i, 'value': i} for i in lsm_df]),
-            html.Div(id="lsm_table", style={"marginTop": "15px"}),
+            html.Div(id="lsm_table", style={"marginTop": "15px", "marginBottom":"15px"}),
             dcc.Tabs(id="tabs-styled-with-inline", value='tab-1', children=[
                 dcc.Tab(label='TSNE Plot of Compounds', value='tab-1', style=tab_style,
                         selected_style=tab_selected_style),
@@ -1192,6 +1194,7 @@ def update_post_process(input_obj):
 
     return fig
 
+
 @app.callback(Output('tabs-content-inline', 'children'),
               [Input('tabs-styled-with-inline', 'value')
                   , Input('intermediate-value', 'children')])
@@ -1308,140 +1311,147 @@ def make_dash_table(selection):
         table.append(html.Tr(html_row))
     return table
 
+
 @app.callback(
     Output('lsm_table', 'children'),
     [Input('lsm_dropdown', 'value'),
      Input('intermediate-value', 'children')])
 def show_lsm_table(chem_dropdown_values, input_obj):
     if chem_dropdown_values is not None:
-        #try:
-            fig = []
-            for item in chem_dropdown_values.split(',')[:5]:
-                lsm = item
-                if(lsm != ''):
-                    print('lsm')
-                    print(lsm)
+        # try:
+        fig = []
+        for item in chem_dropdown_values.split(','):
+            lsm = item
+            if (lsm != ''):
+                print('lsm')
+                print(lsm)
+                # url = "http://www.ilincs.org/api/CompoundMOAs?filter=%7B%22where%22%3A%7B%22lincsPertID%22%3A%22{}%22%7D%7D".format(lsm)
+                url2 = "http://www.ilincs.org/api/SignatureMeta?filter=%7B%22where%22%3A%7B%22lincspertid%22%3A%22" + str(
+                    lsm) + "%22%7D%2C%22limit%22%3A1%7D"
+                print(url2)
+                # response = urllib.urlopen(url)
+                #
+                # data = json.loads(response.read())
+                response2 = urllib.request.urlopen(url2)
+                data2 = json.loads(response2.read())
+                print('2 ' + str(data2))
+                # print "data in chem_dropdown_values:"
+                # print url
+                # print data
+                # c1 = html.Div([], className='two columns')
+                # c2 = html.Div([], className='four columns')
+                # c3 = html.Div([], className='six columns')
+                c1 = []
+                c2 = []
+                c3 = []
+                c4 = []
 
-                    # url = "http://www.ilincs.org/api/CompoundMOAs?filter=%7B%22where%22%3A%7B%22lincsPertID%22%3A%22{}%22%7D%7D".format(lsm)
+                # c1
+                c1.append(html.A(lsm, href="http://www.ilincs.org/ilincs/perturbagen/compound/" + lsm,
+                                 target="_blank",
+                                 style={'display': 'inline-block', 'verticalAlign': 'middle', 'marginLeft': '30px'}))
+                if data2[0]['clueIoCompound']:
+                    c1.append(html.Br())
+                    c1.append(html.P(str(data2[0]['clueIoCompound']), style={'display': 'inline-block', 'verticalAlign': 'middle', 'marginLeft': '30px'}))
+                img_src = "http://life.ccs.miami.edu/life/web/images/sm-images/400/{}.png".format(lsm)
+                print(img_src)
+                c2.append(html.Img(src=img_src, style={'height': '120px', 'width': '120px'}))
+                # if len(data) > 0:
+                #
+                #     if data[0]['geneTargets']:
+                #         c3.append(html.P('geneTargets: {}'.format(data[0]['geneTargets']), ))
+                #         # c2.append(html.P(data[0]['geneTargets']))
+                #     if data[0]['mechanismOfAction']:
+                #         c3.append(html.P("Integrated Moas: {}".format(data[0]['mechanismOfAction'])))
 
-                    url2 = "http://www.ilincs.org/api/SignatureMeta?filter=%7B%22where%22%3A%7B%22lincspertid%22%3A%22" + str(lsm) + "%22%7D%2C%22limit%22%3A1%7D"
-                    print(url2)
-                    # response = urllib.urlopen(url)
-                    #
-                    # data = json.loads(response.read())
+                # c3
+                if len(data2) > 0:
+                    if data2[0]['treatment']:
+                        c3.append(html.P('Mechanism Of Action: {}'.format(data2[0]['treatment']), ))
+                        # c2.append(html.P(data[0]['geneTargets']))
+                    if data2[0]['integratedMoas']:
+                        c3.append(html.P("Integrated MOA: {}".format(data2[0]['integratedMoas'])))
+                    if data2[0]['GeneTargets']:
+                        c3.append(html.P("GeneTargets: {}".format(data2[0]['GeneTargets'])))
+                    if data2[0]['pubChemID']:
+                        c3.append(html.P("pubChemID: {}".format(data2[0]['pubChemID'])))
+                    if data2[0]['stitchID']:
+                        c3.append(html.P("stitchID: {}".format(data2[0]['stitchID'])))
+                        # c2.append(html.P(data[0]['mechanismOfAction']))
 
-                    response2 = urllib.request.urlopen(url2)
+                # c4
+                url3 = "http://www.ilincs.org/api/Compounds/tanimoto?lsmId={}".format(
+                    lsm)
+                response3 = urllib.request.urlopen(url3)
+                data3 = json.loads(response3.read())
+                iterator = 0
+                c4.append(html.P('Chemically Similar Compounds to {}:'.format(
+                    lsm), style={"marginLeft": "10px"}))
+                for item in data3:
+                    # print item
+                    # "secondChemID":"LSM-6474", "compound":"ST013886", "pubchemCID":450, "similarity":1
+                    if iterator > 4:
+                        break
 
-                    data2 = json.loads(response2.read())
-                    print('2 ' + str(data2))
+                    if item['secondChemID']:
+                        c4.append(html.P("LSMID: {} / ".format(item['secondChemID']),
+                                         style={"display": "inline-block", "marginTop": "5px", "marginBottom": "2px",
+                                                "fontWeight": "300"}))
+                        # fig.append(html.P(item['secondChemID']))
+                    # if item['compound']:
+                    #     fig.append(html.P("compound: {} / ".format(item['compound']), style={"display": "inline-block","marginTop": "5px", "marginBottom": "2px"}))
+                    #     # fig.append(html.P(item['compound']))
+                    if item['pubchemCID']:
+                        c4.append(html.P("pubchemID: {} / ".format(item['pubchemCID']),
+                                         style={"display": "inline-block", "marginTop": "5px", "marginBottom": "2px",
+                                                "fontWeight": "300"}))
+                        # fig.append(html.P(item['pubchemCID']))
+                    if item['similarity']:
+                        c4.append(html.P("similarity: {} ".format(item['similarity']),
+                                         style={"display": "inline-block", "marginTop": "5px", "marginBottom": "2px",
+                                                "fontWeight": "300"}))
+                        # fig.append(html.P(item['similarity']))
+                    c4.append(html.Hr(
+                        style={"paddingTop": "2px", "paddingBottom": "2px", "marginTop": "2px", "marginBottom": "2px",
+                               "fontWeight": "300"}))
+                    iterator += 1
+                html_row = html.Div([
+                    # html.Div(c1),
+                    # html.Div(c2),
+                    # html.Div(c3),
+                    # html.Div(c4)
+                    html.Div(c1, className='two columns'),
+                    html.Div(c2, className='two columns'),
+                    html.Div(c3, className='four columns'),
+                    html.Div(c4, className='four columns')
+                    # ,
+                    # html.Div([
+                    #     c2
+                    # ], className='four columns'),
+                    # html.Div([
+                    #      c3
+                    # ], className='six columns')
 
-                    # print "data in chem_dropdown_values:"
-                    # print url
-                    # print data
-                    # c1 = html.Div([], className='two columns')
-                    # c2 = html.Div([], className='four columns')
-                    # c3 = html.Div([], className='six columns')
-                    c1 = []
-                    c2 = []
-                    c3 = []
-                    c4 = []
+                ], className='row')
 
-                    c1.append(html.A(lsm, href="http://www.ilincs.org/ilincs/perturbagen/compound/" + lsm,
-                                     target="_blank",
-                                     style={'display': 'inline-block', 'verticalAlign': 'middle', 'marginLeft': '10px'}))
-                    if data2[0]['clueIoCompound']:
-                        c1.append(html.Br())
-                        c1.append(html.P(str(data2[0]['clueIoCompound'])))
+                fig.append(html_row)
+                fig.append(html.Hr(style={"marginTop": "2px", "marginBottom": "2px", 'color': 'steelBlue',
+                                          'backgroundColor': 'steelBlue'}))
 
-                    img_src = "http://life.ccs.miami.edu/life/web/images/sm-images/400/{}.png".format(lsm)
-                    print(img_src)
-                    c2.append(html.Img(src=img_src, style={'height': '150px', 'width': '150px'}))
-
-                    # if len(data) > 0:
-                    #
-                    #     if data[0]['geneTargets']:
-                    #         c3.append(html.P('geneTargets: {}'.format(data[0]['geneTargets']), ))
-                    #         # c2.append(html.P(data[0]['geneTargets']))
-                    #     if data[0]['mechanismOfAction']:
-                    #         c3.append(html.P("Integrated Moas: {}".format(data[0]['mechanismOfAction'])))
-
-                    if len(data2) > 0:
-
-                        if data2[0]['treatment']:
-                            c3.append(html.P('Mechanism Of Action: {}'.format(data2[0]['treatment']), ))
-                            # c2.append(html.P(data[0]['geneTargets']))
-                        if data2[0]['integratedMoas']:
-                            c3.append(html.P("Integrated MOA: {}".format(data2[0]['integratedMoas'])))
-                        if data2[0]['GeneTargets']:
-                            c3.append(html.P("GeneTargets: {}".format(data2[0]['GeneTargets'])))
-                        if data2[0]['pubChemID']:
-                            c3.append(html.P("pubChemID: {}".format(data2[0]['pubChemID'])))
-                        if data2[0]['stitchID']:
-                            c3.append(html.P("stitchID: {}".format(data2[0]['stitchID'])))
-                            # c2.append(html.P(data[0]['mechanismOfAction']))
-
-                    url3 = "http://www.ilincs.org/api/Compounds/tanimoto?lsmId={}".format(
-                        lsm)
-
-                    response3 = urllib.request.urlopen(url3)
-
-                    data3 = json.loads(response3.read())
-                    iterator = 0
-
-                    c4.append(html.P('Chemically Similar Compounds to {}:'.format(
-                        lsm), style={"marginLeft": "10px"}))
-                    for item in data3:
-                        # print item
-                        # "secondChemID":"LSM-6474", "compound":"ST013886", "pubchemCID":450, "similarity":1
-                        if iterator > 4:
-                            break
-
-                        if item['secondChemID']:
-                            c4.append(html.P("LSMID: {} / ".format(item['secondChemID']),
-                                             style={"display": "inline-block", "marginTop": "5px", "marginBottom": "2px",
-                                                    "fontWeight": "300"}))
-                            # fig.append(html.P(item['secondChemID']))
-                        # if item['compound']:
-                        #     fig.append(html.P("compound: {} / ".format(item['compound']), style={"display": "inline-block","marginTop": "5px", "marginBottom": "2px"}))
-                        #     # fig.append(html.P(item['compound']))
-                        if item['pubchemCID']:
-                            c4.append(html.P("pubchemID: {} / ".format(item['pubchemCID']),
-                                             style={"display": "inline-block", "marginTop": "5px", "marginBottom": "2px",
-                                                    "fontWeight": "300"}))
-                            # fig.append(html.P(item['pubchemCID']))
-                        if item['similarity']:
-                            c4.append(html.P("similarity: {} ".format(item['similarity']),
-                                             style={"display": "inline-block", "marginTop": "5px", "marginBottom": "2px",
-                                                    "fontWeight": "300"}))
-                            # fig.append(html.P(item['similarity']))
-                        c4.append(html.Hr(
-                            style={"paddingTop": "2px", "paddingBottom": "2px", "marginTop": "2px", "marginBottom": "2px",
-                                   "fontWeight": "300"}))
-                        iterator += 1
-
-                    html_row = html.Div([
-                        html.Div(c1, className='two columns'),
-                        html.Div(c2, className='two columns'),
-                        html.Div(c3, className='four columns'),
-                        html.Div(c4, className='four columns')
-                        # ,
-                        # html.Div([
-                        #     c2
-                        # ], className='four columns'),
-                        # html.Div([
-                        #      c3
-                        # ], className='six columns')
-
-                    ], className='row')
-
-                    fig.append(html_row)
-                    fig.append(html.Hr(style={"marginTop": "2px", "marginBottom": "2px", 'color': 'steelBlue',
-                                              'backgroundColor': 'steelBlue'}))
-
-            return fig
-        #except:
-            print('table failed')
-            return
+        return html.Table(
+            children=fig,
+            style={"overflowY": "auto",
+                   "height": "300px",
+                   "maxHeight": "300px",
+                   "border": "1px solid black",
+                   "display": "block",
+                   "padding": "10px",
+                   "marginBottom": "10px"
+                   }
+        )
+        # except:
+        print('table failed')
+        return
     else:
         print('chem_dropdown_values None')
         return
@@ -1485,7 +1495,7 @@ def highlight_molecule(chem_dropdown_values, input_obj):
     # print "tsne"
     # print X_embedded
     # print X_embedded.shape
-    FIGURE = scatter_plot_3d(markers=chem_dropdown_values.split(',')[:5], plot_type='scatter3d', x=tsne_x, y=tsne_y,
+    FIGURE = scatter_plot_3d(markers=chem_dropdown_values.split(','), plot_type='scatter3d', x=tsne_x, y=tsne_y,
                              z=tsne_z, cp=lsm_df)
 
     return FIGURE
@@ -1712,6 +1722,7 @@ def update_output(list_of_contents, list_of_names, list_of_dates):
 def favicon():
     return send_from_directory(os.path.join(app.server.root_path, 'static'),
                                's2l.png', mimetype='image/vnd.microsoft.icon')
+
 
 @app.server.route('/static/<path:path>')
 def static_file(path):
