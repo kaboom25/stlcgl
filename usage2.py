@@ -10,6 +10,7 @@ from dash.dependencies import Input, Output, State
 # import dash_bootstrap_components as dbc
 # import dash_dangerously_set_inner_html
 import dash_core_components as dcc
+import dash_bootstrap_components as dbc
 import dash_html_components as html
 import dash_cytoscape as dash_cytoscape
 import pandas as pd
@@ -323,38 +324,53 @@ app.layout = html.Div([
                     dcc.Loading(id="loading-2", children=[
                         html.Div(
                             id='heatmap',
-                            className='row twelve columns',
-                            style={'position': 'relative', 'right': '15px',
-                                   'margin': '10px', 'padding': '10px'}
+                            className='eight columns',
+                            style={  # 'margin': '10px',
+                                # 'position': 'absolute',
+                                # 'left': '0px',
+                                'height': '1000px',
+                                'minWidth': '900px',
+                                # 'border': '1px solid red'
+                            }
                         )
-                    ], type="circle"
+
+                    ],
+                                type="circle",
                                 )
+
+                    , html.Div(id='post-process',
+                               className='four columns',
+                               style={
+                                   'margin': '20px',
+                                   'flex': '1',
+                                   # 'position': 'absolute',
+                                   # 'right': '15px',
+                                   # 'border': '2px solid black',
+                                   # 'height': '1000px'
+                               }
+                               )
+
                 ],
-                style={'height': '1200px', 'width': '900px'}
+                style={'display': 'flex',
+                       'flex-direction': 'row',
+                       'flex-wrap': 'wrap'}
+                # className='row twelve columns',
+
             )
-            # , dcc.Loading(id="loading-2", children=[html.Div(id='heatmap', className='row twelve columns',
-            #                                                  style={'position': 'relative', 'right': '15px',
-            #                                                         'margin': '10px', 'padding': '10px'})],
-            #               type="circle")
-            , html.Div(id='post-process', className='row twelve columns',
-                       style={'position': 'relative', 'right': '15px', 'paddingBottom': '100px',
-                              'marginBottom': '100px'})
-
-            # , html.Div(id='heatmap', className='row twelve columns', style={'position': 'relative', 'right': '15px','paddingBottom':'100px','marginBottom':'100px'})
-            , html.Div([
-                html.Div([
-                    html.Div([
-
-                        html.P('Copy and Paste The Selected Compounds for Further Analysis.')
-                    ], style={'marginLeft': '10px'}),
-                    # dcc.Dropdown(id='chem_dropdown',
-                    #             multi=True,
-                    #             value=[STARTING_DRUG],
-                    #             options=[{'label': i, 'value': i} for i in df['GeneName']]),
-                ], className='twelve columns')
-
-            ], className='row')
-        ], className='ten columns offset-by-one', style={'backgroundColor': 'white'})
+            # , html.Div([
+            #     html.Div([
+            #         html.Div([
+            #
+            #             html.P('Copy and Paste The Selected Compounds for Further Analysis.')
+            #         ], style={'marginLeft': '10px'}),
+            #         # dcc.Dropdown(id='chem_dropdown',
+            #         #             multi=True,
+            #         #             value=[STARTING_DRUG],
+            #         #             options=[{'label': i, 'value': i} for i in df['GeneName']]),
+            #     ], className='twelve columns')
+            #
+            # ], className='row')
+        ], className='twelve columns', style={'backgroundColor': 'white', 'padding': '25px'})
     ], className='twelve columns', style={'backgroundColor': 'white', 'paddingBottom': '20px', 'minHeight': '100%'}
 
     ),
@@ -435,7 +451,8 @@ app.layout = html.Div([
 
     )
 
-], className='twelve columns'
+], className='twelve columns',
+    style={'height': '1600px'}
 
 )
 
@@ -943,7 +960,7 @@ def update_cgrammer(input_obj):
     fig = [
         stlcgl.Cgl(
             id='cgram-component',
-            network=json.dumps(network_data)
+            network=json.dumps(network_data),
         ),
         # html.Hr([], style={'height': '1px', 'color': 'steelBlue', 'border': 'none', 'color': 'steelBlue',
         #                    'background-color': 'steelBlue', 'marginTop':'40px'}),
@@ -956,7 +973,7 @@ def update_cgrammer(input_obj):
 @app.callback(Output('lsm_dropdown', 'value'), [Input('cgram-component', 'value')])
 def cgl_selected_to_lsm_dropdown(selected):
     ret = ''
-    if selected is not None:
+    if isinstance(selected, str):
         for item in selected.split(','):
             ret += item[:item.index('-', 4)] + ','
         ret = ret[:-1]
@@ -1041,8 +1058,13 @@ def update_post_process(input_obj):
             dcc.Dropdown(id='lsm_dropdown',
                          multi=True,
                          value="",
-                         options=[{'label': i, 'value': i} for i in lsm_df]),
-            html.Div(id="lsm_table", style={"marginTop": "15px", "marginBottom":"15px"}),
+                         options=[{'label': i, 'value': i} for i in lsm_df],
+                         style={'display': 'block',
+                                'height': '60px',
+                                'maxHeight': '60px'}
+                         ),
+            html.Div(id="lsm_table", children=[html.P("selected LSM info will appear here")],
+                     style={"marginTop": "15px", "marginBottom": "15px"}),
             dcc.Tabs(id="tabs-styled-with-inline", value='tab-1', children=[
                 dcc.Tab(label='TSNE Plot of Compounds', value='tab-1', style=tab_style,
                         selected_style=tab_selected_style),
@@ -1054,7 +1076,8 @@ def update_post_process(input_obj):
 
             html.Div(id='tabs-content-inline', style={"marginTop": "15px"}),
 
-        ], className='twelve columns', style={"marginTop": "20px"}),
+        ],  # className='six columns',
+            style={"marginTop": "20px"}),
 
         #     html.Div([
         #
@@ -1317,7 +1340,7 @@ def make_dash_table(selection):
     [Input('lsm_dropdown', 'value'),
      Input('intermediate-value', 'children')])
 def show_lsm_table(chem_dropdown_values, input_obj):
-    if chem_dropdown_values is not None:
+    if isinstance(chem_dropdown_values, str):
         # try:
         fig = []
         for item in chem_dropdown_values.split(','):
@@ -1352,7 +1375,9 @@ def show_lsm_table(chem_dropdown_values, input_obj):
                                  style={'display': 'inline-block', 'verticalAlign': 'middle', 'marginLeft': '30px'}))
                 if data2[0]['clueIoCompound']:
                     c1.append(html.Br())
-                    c1.append(html.P(str(data2[0]['clueIoCompound']), style={'display': 'inline-block', 'verticalAlign': 'middle', 'marginLeft': '30px'}))
+                    c1.append(html.P(str(data2[0]['clueIoCompound']),
+                                     style={'display': 'inline-block', 'verticalAlign': 'middle',
+                                            'marginLeft': '30px'}))
                 img_src = "http://life.ccs.miami.edu/life/web/images/sm-images/400/{}.png".format(lsm)
                 print(img_src)
                 c2.append(html.Img(src=img_src, style={'height': '120px', 'width': '120px'}))
@@ -1438,10 +1463,32 @@ def show_lsm_table(chem_dropdown_values, input_obj):
                 fig.append(html.Hr(style={"marginTop": "2px", "marginBottom": "2px", 'color': 'steelBlue',
                                           'backgroundColor': 'steelBlue'}))
 
+        return dcc.Loading(
+            [
+                html.Table(
+                    children=fig,
+                    style={"overflowY": "auto",
+                           "height": "150px",
+                           "maxHeight": "300px",
+                           "border": "1px solid black",
+                           "display": "block",
+                           "padding": "10px",
+                           "marginBottom": "10px"
+                           }
+                )
+            ], type='circle'
+        )
+        # except:
+        print('table failed')
+        return
+    else:
+        print('chem_dropdown_values None')
         return html.Table(
-            children=fig,
+            children=[html.P(
+                'LSM Info will appear here'
+            )],
             style={"overflowY": "auto",
-                   "height": "300px",
+                   "height": "150px",
                    "maxHeight": "300px",
                    "border": "1px solid black",
                    "display": "block",
@@ -1449,12 +1496,6 @@ def show_lsm_table(chem_dropdown_values, input_obj):
                    "marginBottom": "10px"
                    }
         )
-        # except:
-        print('table failed')
-        return
-    else:
-        print('chem_dropdown_values None')
-        return
 
 
 @app.callback(
@@ -1462,43 +1503,44 @@ def show_lsm_table(chem_dropdown_values, input_obj):
     [Input('lsm_dropdown', 'value'),
      Input('intermediate-value', 'children')])
 def highlight_molecule(chem_dropdown_values, input_obj):
-    network_obj = json.loads(input_obj)
-    lsm_df = network_obj["compounds"]
-    network_data = network_obj["cgram_obj"]
-    # X_embedded = network_obj["tsne"]
-    # # print network_data
-    # # new_network = network_data
-    # # X = network_data['mat']
-    # # X_embedded = TSNE(n_components=3, perplexity=100.0, early_exaggeration=12.0,
-    # #                   learning_rate=500.0, n_iter=10000, n_iter_without_progress=500, min_grad_norm=1e-08,
-    # #                   metric="euclidean", init="random", verbose=0, random_state=None,
-    # #                   method="barnes_hut", angle=0.5).fit_transform(X)
-    # # cp_df = {}
-    # # cp_df["cp"] = lsm_df
-    # # cp_df["x"] = X_embedded[0,:]
-    # # cp_df["y"] = X_embedded[1, :]
-    # # cp_df["z"] = X_embedded[2, :]
-    # print "tsne"
-    # print X_embedded
-    # print X_embedded.shape
-    # FIGURE = scatter_plot_3d( markers = chem_dropdown_values, plot_type = 'scatter3d', x = [i[0] for i in X_embedded], y = [i[1] for i in X_embedded],
-    #                           z = [i[2] for i in X_embedded], cp = lsm_df )
+    if (chem_dropdown_values is not None):
+        network_obj = json.loads(input_obj)
+        lsm_df = network_obj["compounds"]
+        network_data = network_obj["cgram_obj"]
+        # X_embedded = network_obj["tsne"]
+        # # print network_data
+        # # new_network = network_data
+        # # X = network_data['mat']
+        # # X_embedded = TSNE(n_components=3, perplexity=100.0, early_exaggeration=12.0,
+        # #                   learning_rate=500.0, n_iter=10000, n_iter_without_progress=500, min_grad_norm=1e-08,
+        # #                   metric="euclidean", init="random", verbose=0, random_state=None,
+        # #                   method="barnes_hut", angle=0.5).fit_transform(X)
+        # # cp_df = {}
+        # # cp_df["cp"] = lsm_df
+        # # cp_df["x"] = X_embedded[0,:]
+        # # cp_df["y"] = X_embedded[1, :]
+        # # cp_df["z"] = X_embedded[2, :]
+        # print "tsne"
+        # print X_embedded
+        # print X_embedded.shape
+        # FIGURE = scatter_plot_3d( markers = chem_dropdown_values, plot_type = 'scatter3d', x = [i[0] for i in X_embedded], y = [i[1] for i in X_embedded],
+        #                           z = [i[2] for i in X_embedded], cp = lsm_df )
 
-    tsne_x = network_obj["tsne_x"]
-    tsne_y = network_obj["tsne_y"]
-    tsne_z = network_obj["tsne_z"]
-    # cp_df = {}
-    # cp_df["cp"] = lsm_df
-    # cp_df["x"] = X_embedded[0,:]
-    # cp_df["y"] = X_embedded[1, :]
-    # cp_df["z"] = X_embedded[2, :]
-    # print "tsne"
-    # print X_embedded
-    # print X_embedded.shape
-    FIGURE = scatter_plot_3d(markers=chem_dropdown_values.split(','), plot_type='scatter3d', x=tsne_x, y=tsne_y,
-                             z=tsne_z, cp=lsm_df)
+        tsne_x = network_obj["tsne_x"]
+        tsne_y = network_obj["tsne_y"]
+        tsne_z = network_obj["tsne_z"]
+        # cp_df = {}
+        # cp_df["cp"] = lsm_df
+        # cp_df["x"] = X_embedded[0,:]
+        # cp_df["y"] = X_embedded[1, :]
+        # cp_df["z"] = X_embedded[2, :]
+        # print "tsne"
+        # print X_embedded
+        # print X_embedded.shape
+        FIGURE = scatter_plot_3d(markers=chem_dropdown_values.split(','), plot_type='scatter3d', x=tsne_x, y=tsne_y,
+                                 z=tsne_z, cp=lsm_df)
 
-    return FIGURE
+        return FIGURE
 
 
 #
