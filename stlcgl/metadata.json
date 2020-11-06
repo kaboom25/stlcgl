@@ -40,6 +40,13 @@
         "required": true,
         "description": "added by Phillip\nstringified clustergrammer-gl network object"
       },
+      "divId": {
+        "type": {
+          "name": "string"
+        },
+        "required": true,
+        "description": "added by Phillip"
+      },
       "setProps": {
         "type": {
           "name": "func"

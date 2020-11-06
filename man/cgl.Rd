@@ -10,7 +10,7 @@
 }
 
 \usage{
-cgl(id=NULL, label=NULL, value=NULL, network=NULL)
+cgl(id=NULL, label=NULL, value=NULL, network=NULL, divId=NULL)
 }
 
 \arguments{
@@ -22,6 +22,8 @@ cgl(id=NULL, label=NULL, value=NULL, network=NULL)
 
 \item{network}{Character. added by Phillip
 stringified clustergrammer-gl network object}
+
+\item{divId}{Character. added by Phillip}
 }
 
 \value{named list of JSON elements corresponding to React.js properties and their values}
