@@ -67641,8 +67641,8 @@ module.exports = function generate_cat_array(params, inst_axis){
 
   var all_index = _.keys(current_cats).sort();
 
-  console.log('cur cats')
-    console.log(current_cats)
+  // console.log('cur cats')
+  //   console.log(current_cats)
 
   var inst_data;
   _.each(all_index, function(inst_index){
@@ -67653,16 +67653,16 @@ module.exports = function generate_cat_array(params, inst_axis){
 
     cat_data.push(inst_data);
 
-    console.log('  inst_index')
-    console.log(inst_index)
-
-      console.log('   inst data')
-    console.log(current_cats)
+    // console.log('  inst_index')
+    // console.log(inst_index)
+    //
+    //   console.log('   inst data')
+    // console.log(current_cats)
 
   });
 
-  console.log('cat_data')
-    console.log(cat_data)
+  // console.log('cat_data')
+  //   console.log(cat_data)
 
 
   return cat_data;
@@ -67762,8 +67762,8 @@ module.exports = function generate_cat_info(params){
           new_cat = i_cat;
         }
 
-        console.log('new_cat')
-      console.log(new_cat)
+      //   console.log('new_cat')
+      // console.log(new_cat)
 
         cat_instances.push(new_cat);
       });

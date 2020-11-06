@@ -9992,6 +9992,8 @@ export default class Cgl extends Component {
     }
 
     createHeatmap() {
+      console.log('CREATE HEATMAP')
+
       //callbacks
         //called when user clicks on trapezoids.
         const my_dendro_click_callback = function () {
@@ -10017,11 +10019,11 @@ export default class Cgl extends Component {
         let network;
 
         if(this.props.network == ''){
+          console.log('DEFAULT NETWORK')
           network = defNetwork
         } else {
           network = JSON.parse(this.props.network)
         }
-
 
         // set matrix colors
         network.matrix_colors = {}
@@ -10036,6 +10038,7 @@ export default class Cgl extends Component {
         args.dendro_click_callback = my_dendro_click_callback
 
         cgm = CGM(args);
+        this.numMounts++
     }
 
     componentDidMount() {
@@ -10044,11 +10047,28 @@ export default class Cgl extends Component {
     }
 
     componentWillUnmount() {
+      console.log('UNMOUNT')
       this._ismounted = false;
     }
 
-  render() {
+    componentDidUpdate(prevProps, prevState, snapshot) {
+      console.log('COMPONENT UPDATE')
+      if(prevProps.network != this.props.network){
+        // this.props.setProps({divId: 'id_' + Math.floor(Math.random() * 10000)})
+        console.log('NETWORK CHANGED')
+        console.log('prev div ' + document.getElementById(prevProps.id))
+        let lastDiv = document.getElementById(prevProps.id)
+        let parentNode = lastDiv.parentNode
+        let reDiv = document.createElement('div')
+        reDiv.setAttribute("id", this.props.id)
+        parentNode.removeChild(lastDiv)
+        parentNode.appendChild(reDiv)
 
+        this.createHeatmap()
+      }
+    }
+
+  render() {
         return (
             <div>
               <div id = {this.props.id} />
@@ -10074,6 +10094,11 @@ Cgl.propTypes = {
      * stringified clustergrammer-gl network object
      */
     network: PropTypes.string.isRequired,
+
+    /**
+     * added by Phillip
+     */
+    divId: PropTypes.string.isRequired,
 
     /**
      * Dash-assigned callback that should be called to report property changes

@@ -87,9 +87,10 @@ print('loading JSON Clustergrammer data...')
 with open('mult_view.json', 'r') as f:
     network_data = json.load(f)
 print('done')
+
 STARTING_DRUG = 'BCL2A1'
 df = pd.read_csv('KDgenes.txt', sep="\n")
-print(df)
+# print(df)
 # df = pd.read_csv('KDgenes.txt').drop(['Unnamed: 0'],axis=1)
 # df = pd.read_csv('small_molecule_drugbank.csv').drop(['Unnamed: 0'],axis=1)
 
@@ -121,7 +122,6 @@ app.layout = html.Div([
             # Row 1: Header and Intro text
             #
             # html.Link(rel='shortcut icon', href = '/static/img/sig2lead.png'),
-
             html.Link(
                 rel='stylesheet',
                 href='/static/body.css'
@@ -138,7 +138,6 @@ app.layout = html.Div([
                 rel='stylesheet',
                 href='/static/fonts.googleapis.medium.css'
             ),
-
             # html.Link(
             #     rel='stylesheet',
             #     href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'
@@ -147,164 +146,64 @@ app.layout = html.Div([
                 rel='stylesheet',
                 href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css'
             ),
-
             html.Link(
                 rel='stylesheet',
                 href='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css'
             ),
-
             html.Link(
                 rel='stylesheet',
                 href='/static/stylesheet.css'
             ),
 
             # nav wrapper starts here
-            html.Div(
-                children=[
-                    # nav bar
-
-                    html.Nav(
-                        # inside div
-                        html.Div(
-                            children=[
-                                html.A('Sig2Lead',
-                                       style={
-                                           'position': 'relative',
-                                           'top': '0px',
-                                           'left': '10px',
-                                           'fontFamily': 'Dosis',
-                                           'display': 'inline',
-                                           'fontSize': '3.0rem',
-                                           'color': '#4D637F'
-                                       }, href='/'),
-                                html.A('About',
-                                       style={
-                                           'position': 'relative',
-                                           'float': 'right',
-                                           'top': '0px',
-                                           'left': '10px',
-                                           'paddingRight': '15px',
-                                           'fontFamily': 'Dosis',
-                                           'display': 'inline',
-                                           'fontSize': '3.0rem',
-                                           'color': '#4D637F'
-                                       }, href='/about'),
-
-                                # ul list components
-                                # html.Ul
-                                # (
-                                #     children=[
-                                #         html.Li(html.A('Configuration', href='/apps/config')),
-                                #         html.Li(html.A('Segmentation', href='/apps/segmentation')),
-                                #         html.Li(html.A('Main Page', href='/apps/users')),
-                                #     ],
-                                #     id='nav-mobile',
-                                #     className='right hide-on-med-and-down'
-                                # ),
-                            ],
-                            className=' nav-wrapper'
-                        ), style={'backgroundColor': 'white', 'paddingTop': '10px'}),
-
-                ],
-                className='navbar-fixed'
-            ),
-
-            html.Hr([], style={'height': '1px', 'color': '#4D637F', 'border': 'none', 'color': '#333',
-                               'backgroundColor': '#333'}),
-
             html.Div([
-
-                # dcc.Loading(id="loading-1", children=[html.Div(id="output-1")], type="default"),
-                # dcc.Input(id="input-1", value='Input triggers local spinner'),
-                # html.Div(
-                #     [
-                #         dcc.Loading(
-                #             id="loading-2",
-                #             children=[html.Div([html.Div(id="output-2")])],
-                #             type="circle",
-                #         ),
-                #         dcc.Input(id="input-2", value='Input triggers nested spinner'),
-                #     ]
-                # ),
-
-                html.Div([
-
+                # nav bar
+                html.Nav(
+                    # inside div
                     html.Div([
+                        html.A('Sig2Lead',
+                               style={
+                                   'position': 'relative',
+                                   'top': '0px',
+                                   'left': '10px',
+                                   'fontFamily': 'Dosis',
+                                   'display': 'inline',
+                                   'fontSize': '3.0rem',
+                                   'color': '#4D637F'
+                               }, href='/'),
+                        html.A('About',
+                               style={
+                                   'position': 'relative',
+                                   'float': 'right',
+                                   'top': '0px',
+                                   'left': '10px',
+                                   'paddingRight': '15px',
+                                   'fontFamily': 'Dosis',
+                                   'display': 'inline',
+                                   'fontSize': '3.0rem',
+                                   'color': '#4D637F'
+                               }, href='/about'),
 
-                        html.H5('Select a Gene From The Dropdown.', style={'display': 'inline-block'}),
-                        html.Abbr(html.I(className="fa fa-question-circle fa-md"),
-                                  title="Optional SDF File of User Defined Compounds.",
-                                  style={'display': 'inline-block'})
-                    ], style={'marginLeft': '10px', 'display': 'inline-block'}),
-                    dcc.Dropdown(id='gene_dropdown',
-                                 multi=False,
-                                 value=STARTING_DRUG,
-                                 options=[{'label': i, 'value': i} for i in df['GeneName']]),
-                    html.H6('Select number of LINCS Compounds, Condordant to the Selected Gene KnockDown Signatures.',
-                            style={'display': 'inline-block'}),
-                    html.Div(
-                        dcc.Slider(
-                            id='compound_slider',
-                            min=0,
-                            max=400,
-                            step=50,
-                            value=100,
-                            marks={i: '{}'.format(i) for i in range(0, 401, 50)}
+                        # ul list components
+                        # html.Ul
+                        # (
+                        #     children=[
+                        #         html.Li(html.A('Configuration', href='/apps/config')),
+                        #         html.Li(html.A('Segmentation', href='/apps/segmentation')),
+                        #         html.Li(html.A('Main Page', href='/apps/users')),
+                        #     ],
+                        #     id='nav-mobile',
+                        #     className='right hide-on-med-and-down'
+                        # ),
+                    ], className=' nav-wrapper'
+                    ), style={'backgroundColor': 'white', 'paddingTop': '10px'}
+                ),
+            ], className='navbar-fixed'
+            )
 
-                        ), style={'width': '90%'})
-
-                ], className='six columns'),
-                html.Div([
-                    html.Div([
-                        # html.I(className="fa fa-question fa-lg"),
-                        html.H5('SMILES File of Compounds of Interest (Optional).', style={'display': 'inline-block'})
-                        , html.Abbr(html.I(className="fa fa-question-circle fa-md"),
-                                    title="Optional SMILES File of User Defined Compounds in CSV Format with Name and SMILES as Headers.",
-                                    style={'display': 'inline-block'})
-                        , html.A(id='download-link2', children='   Download An Example', href="/dash/urlToDownload")
-                    ], style={'marginLeft': '10px', 'display': 'inline-block'}),
-
-                    # dcc.Dropdown(id='chem_dropdown3',
-                    #            multi=True,
-                    #           value=[STARTING_DRUG],
-                    #          options=[{'label': i, 'value': i} for i in df['GeneName']]
-                    #         ),
-                    html.Div([
-                        dcc.Upload(
-                            id='upload-data',
-                            children=html.Div([
-                                '(Optional) Drag and Drop SDF File of Compounds of Interest or ',
-                                html.A('Select Files')
-                            ]),
-                            style={
-                                'width': '100%',
-                                'height': '35px',
-                                'lineHeight': '35px',
-                                'borderWidth': '1px',
-                                'borderStyle': 'dashed',
-                                'borderRadius': '5px',
-                                'textAlign': 'center',
-                                'fontSize': '11px'
-                                # 'margin': '10px'
-                            },
-                            # Allow multiple files to be uploaded
-                            multiple=True
-                        )
-
-                    ])
-                    # html.Div([
-                    #     html.A(id='download-link', children='Download File'),
-                    #     dcc.Dropdown(
-                    #         id='dropdown',
-                    #         options=[{'label': i, 'value': i} for i in ['NYC', 'LA' 'SF']],
-                    #         value='NYC',
-                    #         clearable=False
-                    #     )
-                    # ])
-
-                ], className='six columns')
-
-            ], className='row')
+            # blue line
+            # html.Hr([], style={'height': '1px', 'color': '#4D637F', 'border': 'none', 'color': '#333',
+            # 'backgroundColor': '#333'})
 
             # uploaded csv file
             , html.Hr([], style={'height': '1px', 'color': 'steelBlue', 'border': 'none', 'color': 'steelBlue',
@@ -313,54 +212,129 @@ app.layout = html.Div([
             , dcc.Loading(id="loading-1", children=[html.Div(id='intermediate-value', style={'display': 'none'})],
                           type="default")
             , html.Div(id='output-data-upload')
-            #     , cgrammer.cgrammer(
-            #         id='cgram-component',
-            #         label='',
-            # #        network_data=new_network
+
             #
-            #     )
-            , html.Div(
-                [
+            , html.Div([
+                html.Div([
+                    # Gene Dropdown, Lincs Slider
+                    html.Div([
+                        # Gene Dropdown
+                        html.Div([
+                            html.H5('Select a Gene From The Dropdown.', style={'display': 'inline-block'}),
+                            html.Abbr(html.I(className="fa fa-question-circle fa-md"),
+                                      title="Optional SDF File of User Defined Compounds.",
+                                      style={'display': 'inline-block'})
+                        ], style={'marginLeft': '10px', 'display': 'inline-block'}),
+                        dcc.Dropdown(id='gene_dropdown',
+                                     multi=False,
+                                     value=STARTING_DRUG,
+                                     options=[{'label': i, 'value': i} for i in df['GeneName']]),
+
+                        # lincs slides
+                        html.H6(
+                            'Select number of LINCS Compounds, Condordant to the Selected Gene KnockDown Signatures.',
+                            style={'display': 'inline-block'}),
+                        html.Div(
+                            dcc.Slider(
+                                id='compound_slider',
+                                min=0,
+                                max=400,
+                                step=50,
+                                value=100,
+                                marks={i: '{}'.format(i) for i in range(0, 401, 50)}
+
+                            ), style={'width': '90%'}
+                        )
+                    ]),
+
+                    # SMILES Upload
+                    html.Div([
+                        html.Div([
+                            # html.I(className="fa fa-question fa-lg"),
+                            html.H5('SMILES File of Compounds of Interest (Optional).',
+                                    style={'display': 'inline-block'})
+                            , html.Abbr(html.I(className="fa fa-question-circle fa-md"),
+                                        title="Optional SMILES File of User Defined Compounds in CSV Format with Name and SMILES as Headers.",
+                                        style={'display': 'inline-block'})
+                            , html.A(id='download-link2', children='   Download An Example',
+                                     href="/dash/urlToDownload")
+                        ], style={'marginLeft': '10px', 'display': 'inline-block'}),
+
+                        # dcc.Dropdown(id='chem_dropdown3',
+                        #            multi=True,
+                        #           value=[STARTING_DRUG],
+                        #          options=[{'label': i, 'value': i} for i in df['GeneName']]
+                        #         ),
+                        html.Div([
+                            dcc.Upload(
+                                id='upload-data',
+                                children=html.Div([
+                                    '(Optional) Drag and Drop SDF File of Compounds of Interest or ',
+                                    html.A('Select Files')
+                                ]),
+                                style={
+                                    'width': '100%',
+                                    'height': '35px',
+                                    'lineHeight': '35px',
+                                    'borderWidth': '1px',
+                                    'borderStyle': 'dashed',
+                                    'borderRadius': '5px',
+                                    'textAlign': 'center',
+                                    'fontSize': '11px'
+                                    # 'margin': '10px'
+                                },
+                                # Allow multiple files to be uploaded
+                                multiple=True
+                            )
+                        ])
+                        # html.Div([
+                        #     html.A(id='download-link', children='Download File'),
+                        #     dcc.Dropdown(
+                        #         id='dropdown',
+                        #         options=[{'label': i, 'value': i} for i in ['NYC', 'LA' 'SF']],
+                        #         value='NYC',
+                        #         clearable=False
+                        #     )
+                        # ])
+                    ]),
+
+                    # selected compounds, post - heatmap
+                    html.Div(
+                        id='post-process',
+                        style={'width': '50%'}
+                    ),
+                ]),
+
+                # heatmap
+                html.Div([
+                    # heatmap loading
                     dcc.Loading(id="loading-2", children=[
+                        # heatmap
                         html.Div(
                             id='heatmap',
+                            children=html.Div([
+                                stlcgl.Cgl(
+                                    id='cgram-component',
+                                    divId='id_',
+                                    network=json.dumps(network_data),
+                                ),
+                            ]),
                             className='eight columns',
                             style={  # 'margin': '10px',
                                 # 'position': 'absolute',
-                                # 'left': '0px',
+                                'left': '15px',
                                 'height': '1000px',
                                 'minWidth': '900px',
                                 # 'border': '1px solid red'
                             }
                         )
+                    ], type="circle")
+                ]),
 
-                    ],
-                                type="circle",
-                                )
-
-                    , html.Div(id='post-process',
-                               className='four columns',
-                               style={
-                                   'margin': '20px',
-                                   'flex': '1',
-                                   # 'position': 'absolute',
-                                   # 'right': '15px',
-                                   # 'border': '2px solid black',
-                                   # 'height': '1000px'
-                               }
-                               )
-
-                ],
-                style={'display': 'flex',
-                       'flex-direction': 'row',
-                       'flex-wrap': 'wrap'}
-                # className='row twelve columns',
-
-            )
+            ], style={'display': 'flex', 'flexDirection': 'row', 'flexWrap': 'wrap', 'paddingRight': '0px'})
             # , html.Div([
             #     html.Div([
             #         html.Div([
-            #
             #             html.P('Copy and Paste The Selected Compounds for Further Analysis.')
             #         ], style={'marginLeft': '10px'}),
             #         # dcc.Dropdown(id='chem_dropdown',
@@ -370,12 +344,15 @@ app.layout = html.Div([
             #     ], className='twelve columns')
             #
             # ], className='row')
+
+            , html.Div(
+                id='table_and_selection'
+            )
         ], className='twelve columns', style={'backgroundColor': 'white', 'padding': '25px'})
     ], className='twelve columns', style={'backgroundColor': 'white', 'paddingBottom': '20px', 'minHeight': '100%'}
-
     ),
-    html.Footer(
 
+    html.Footer(
         html.Div(
             [
 
@@ -445,12 +422,10 @@ app.layout = html.Div([
                 ),
             ],
             className='row'
-
-        ), style={'width': '100%', 'backgroundColor': 'black', 'bottom': '0px', 'marginTop': '130px',
-                  'overflow': 'hidden', 'position': 'fixed'}
-
+        ),
+        style={'width': '100%', 'backgroundColor': 'black', 'bottom': '0px', 'marginTop': '130px',
+               'overflow': 'hidden', 'position': 'fixed'}
     )
-
 ], className='twelve columns',
     style={'height': '1600px'}
 
@@ -921,11 +896,16 @@ def make_network_obj(list_of_contents, gene, num_compounds, list_of_names, list_
         return network_obj
 
 
-@app.callback(Output('heatmap', 'children'),
-              [Input('intermediate-value', 'children')])
-def update_cgrammer(input_obj):
+@app.callback(Output('cgram-component', 'network'),
+              [Input('intermediate-value', 'children'),
+               Input('gene_dropdown', 'value'),
+               Input('compound_slider', 'value')])
+def update_cgrammer(input_obj, gene, slider):
     print('update_cgrammer_check')
     # print('inobj' + input_obj)
+
+    if not isinstance(input_obj, str):
+        return
 
     network_obj = json.loads(input_obj)
 
@@ -954,24 +934,30 @@ def update_cgrammer(input_obj):
     #     #
     #
     # ]
+
+    # print(network_data)
     with open('mult_view.json', 'r') as f:
         mult_view_data = json.load(f)
 
-    fig = [
-        stlcgl.Cgl(
-            id='cgram-component',
-            network=json.dumps(network_data),
-        ),
-        # html.Hr([], style={'height': '1px', 'color': 'steelBlue', 'border': 'none', 'color': 'steelBlue',
-        #                    'background-color': 'steelBlue', 'marginTop':'40px'}),
-        # html.H6('This Heatmap is Generated with {} LINCS Compounds And {} Input Compounds'.format(num_compounds, len(input_df))),
-    ]
+    # fig = [
+    #     stlcgl.Cgl(
+    #         id='cgram-component',
+    #         divId='id_' + str(gene) + '_' + str(slider),
+    #         network=json.dumps(network_data),
+    #     ),
+    #     # html.Hr([], style={'height': '1px', 'color': 'steelBlue', 'border': 'none', 'color': 'steelBlue',
+    #     #                    'background-color': 'steelBlue', 'marginTop':'40px'}),
+    #     # html.H6('This Heatmap is Generated with {} LINCS Compounds And {} Input Compounds'.format(num_compounds, len(input_df))),
+    # ]
     # print('ret' + json.dumps(network_data))
-    return fig
+    # return fig
+    return json.dumps(network_data)
 
 
+# NOT COMMENT AAAAAAAAAAAAAAAAAAA
 @app.callback(Output('lsm_dropdown', 'value'), [Input('cgram-component', 'value')])
 def cgl_selected_to_lsm_dropdown(selected):
+    print('callback working')
     ret = ''
     if isinstance(selected, str):
         for item in selected.split(','):
@@ -982,10 +968,49 @@ def cgl_selected_to_lsm_dropdown(selected):
     return ret
 
 
+# @app.callback(Output('table_and_selection', 'children'), [Input('intermediate-value', 'children')])
+# def update_table_and_selected(input_obj):
+#     network_obj = json.loads(str(input_obj))
+#     lsm_df = network_obj["compounds"]
+#     network_data = network_obj["cgram_obj"]
+#     new_network = network_data
+#     fig = [
+#         html.Div([
+#             html.Div(id="lsm_table", children=[html.P("selected LSM info will appear here")],
+#                      style={"marginTop": "15px", "marginBottom": "15px"}),
+#             dcc.Tabs(id="tabs-styled-with-inline", value='tab-1', children=[
+#                 dcc.Tab(label='TSNE Plot of Compounds', value='tab-1', style=tab_style,
+#                         selected_style=tab_selected_style),
+#                 dcc.Tab(label='Gene-Compound Network', value='tab-2', style=tab_style,
+#                         selected_style=tab_selected_style),
+#                 # dcc.Tab(label='Tab 3', value='tab-3', style=tab_style, selected_style=tab_selected_style),
+#                 # dcc.Tab(label='Tab 4', value='tab-4', style=tab_style, selected_style=tab_selected_style),
+#             ], style=tabs_styles),
+#
+#             html.Div(id='tabs-content-inline', style={"marginTop": "15px"}),
+#
+#         ],  # className='six columns',
+#             style={'width': '600px'}),
+#     ]
+#
+#     return fig
+
+
 # intermediate-value --> post-process
-@app.callback(Output('post-process', 'children'),
-              [Input('intermediate-value', 'children')])
+@app.callback([Output('post-process', 'children'), Output('table_and_selection', 'children')],
+              [Input('intermediate-value', 'children'),
+               # Input('cgram-component', 'value')
+               ])
 def update_post_process(input_obj):
+    # selected for drpodown
+    selected_dropdown_values = ''
+    if False:
+        selected_dropdown_values = ''
+        if isinstance(selected_dropdown_values, str):
+            for item in selected_dropdown_values.split(','):
+                selected_dropdown_values += item[:item.index('-', 4)] + ','
+                selected_dropdown_values = selected_dropdown_values[:-1]
+
     # num_compounds = 10
     # if gene is not '':
     #     input_df = []
@@ -1042,29 +1067,7 @@ def update_post_process(input_obj):
     # network_data = json.load(f)
 
     fig = [
-        # html.Hr([], style={'height': '1px', 'color': 'steelBlue', 'border': 'none', 'color': 'steelBlue',
-        #                    'background-color': 'steelBlue', 'marginTop':'40px'}),
-        # html.H6('This Heatmap is Generated with {} LINCS Compounds And {} Input Compounds'.format(num_compounds, len(input_df))),
-        #
-        # cgrammer.cgrammer(
-        #     id='cgram-component',
-        #     label='',
-        #     network_data=new_network
-        #
-        #
-        # )
         html.Div([
-            html.H6('Select Compounds From the Dropdown'),
-            dcc.Dropdown(id='lsm_dropdown',
-                         multi=True,
-                         value="",
-                         options=[{'label': i, 'value': i} for i in lsm_df],
-                         style={'display': 'block',
-                                'height': '60px',
-                                'maxHeight': '60px'}
-                         ),
-            html.Div(id="lsm_table", children=[html.P("selected LSM info will appear here")],
-                     style={"marginTop": "15px", "marginBottom": "15px"}),
             dcc.Tabs(id="tabs-styled-with-inline", value='tab-1', children=[
                 dcc.Tab(label='TSNE Plot of Compounds', value='tab-1', style=tab_style,
                         selected_style=tab_selected_style),
@@ -1075,147 +1078,27 @@ def update_post_process(input_obj):
             ], style=tabs_styles),
 
             html.Div(id='tabs-content-inline', style={"marginTop": "15px"}),
-
         ],  # className='six columns',
-            style={"marginTop": "20px"}),
-
-        #     html.Div([
-        #
-        #
-        #
-        #
-        #
-        #         html.Div([
-        #
-        #             html.A("",
-        #                    id='chem_name',
-        #                    href="",
-        #                    target="_blank"),
-        #
-        #             html.Div(
-        #                    id='chem_desc',
-        #                    # style=dict(maxHeight='400px', fontSize='12px')
-        #             ),
-        #             html.Br(),
-        #             html.Img(id='chem_img', src=""),
-        #
-        #         ], className='two columns', style=dict(height='300px')),
-        #         html.Div([
-        #             # dcc.RadioItems(
-        #             #     id='charts_radio',
-        #             #     options=[
-        #             #         dict(label='3D Scatter', value='scatter3d'),
-        #             #         dict(label='2D Scatter', value='scatter'),
-        #             #         dict(label='2D Histogram', value='histogram2d'),
-        #             #     ],
-        #             #     labelStyle=dict(display='inline'),
-        #             #     value='scatter3d'
-        #             # ),
-        #             html.H6('Select Compounds From the Dropdown'),
-        #             dcc.Graph(id='clickable-graph',
-        #                       # style=dict(width='700px'),
-        #                       hoverData=dict(points=[dict(pointNumber=0)]),
-        #                       # data = X_embedded
-        #                       figure=FIGURE
-        #                       )
-        #
-        #         ], className='five columns')
-        #     # html.Div([
-        #     #     # dcc.RadioItems(
-        #     #     #     id='charts_radio',
-        #     #     #     options=[
-        #     #     #         dict(label='3D Scatter', value='scatter3d'),
-        #     #     #         dict(label='2D Scatter', value='scatter'),
-        #     #     #         dict(label='2D Histogram', value='histogram2d'),
-        #     #     #     ],
-        #     #     #     labelStyle=dict(display='inline'),
-        #     #     #     value='scatter3d'
-        #     #     # ),
-        #     #     html.H6('Select Compounds From the Dropdown'),
-        #     #     dcc.Graph(id='clickable-graph',
-        #     #               # style=dict(width='700px'),
-        #     #               hoverData=dict(points=[dict(pointNumber=0)]),
-        #     #               #data = X_embedded
-        #     #               figure=FIGURE
-        #     #               )
-        #     #
-        #     #   ], className='five columns')
-        #         ,
-        #         html.Div([
-        #             html.Div([
-        #                 # html.H6('Select Compounds From the Dropdown'),
-        #                 # dash_cytoscape.Cytoscape(
-        #                 #     id='cytoscape',
-        #                 #     layout={'name': 'preset'},
-        #                 #     elements=[
-        #                 #         {'data': {'id': 'one', 'label': 'Node 1'},
-        #                 #          'position': {'x': 50, 'y': 50}},
-        #                 #         {'data': {'id': 'two', 'label': 'Node 2'},
-        #                 #          'position': {'x': 200, 'y': 200}},
-        #                 #         {'data': {'source': 'one',
-        #                 #                   'target': 'two',
-        #                 #                   'label': 'Node 1 to 2'}}
-        #                 #     ]
-        #                 # )
-        #
-        #
-        #
-        #                 # html.A(id='download-link4', children='Download File'),
-        #                 # html.Img(id='chem_img', src=DRUG_IMG),
-        #                 #
-        #                 # html.Br(),
-        #                 #
-        #                 # html.A(STARTING_DRUG,
-        #                 #        id='chem_name',
-        #                 #        href="https://www.drugbank.ca/drugs/DB01002",
-        #                 #        target="_blank"),
-        #                 #
-        #                 # html.P(DRUG_DESCRIPTION,
-        #                 #        id='chem_desc',
-        #                 #        style=dict(maxHeight='400px', fontSize='12px')),
-        #
-        #                 # dcc.Dropdown(
-        #                 #     id='dropdown',
-        #                 #     options=[{'label': i, 'value': i} for i in ['NYC', 'LA' 'SF']],
-        #                 #     value='NYC',
-        #                 #     clearable=False
-        #                 # )
-        #             ])
-        #         ], className='six columns')
-        # ], className = 'row')
-        # , html.Div([
-        #             html.A(id='download-link4', children='Download File'),
-        #             html.Img(id='chem_img', src=DRUG_IMG),
-        #
-        #             html.Br(),
-        #
-        #             html.A(STARTING_DRUG,
-        #                    id='chem_name',
-        #                    href="https://www.drugbank.ca/drugs/DB01002",
-        #                    target="_blank"),
-        #
-        #             html.P(DRUG_DESCRIPTION,
-        #                    id='chem_desc',
-        #                    style=dict(maxHeight='400px', fontSize='12px')),
-        #
-        #         ])
-        # html.Div([
-        #     html.A(id='download-link', children='Download File'),
-        #     dcc.Dropdown(
-        #         id='dropdown',
-        #         options=[{'label': i, 'value': i} for i in ['NYC', 'LA' 'SF']],
-        #         value='NYC',
-        #         clearable=False
-        #     )
-        # ])
-        #
-        #       ], className = 'six columns')
-        #
-        # ], className = 'row')
-
+            style={'width': '600px'}),
     ]
 
-    return fig
+    fig2 = [
+        html.Div([
+            html.H6('Select Compounds From the Dropdown'),
+            dcc.Dropdown(
+                id='lsm_dropdown',
+                multi=True,
+                value=selected_dropdown_values,
+                options=[{'label': i, 'value': i} for i in lsm_df],
+                style={'display': 'block',
+                       'maxHeight': '150px'}
+            ),
+            html.Div(id="lsm_table", children=[html.P("selected LSM info will appear here")], ),
+        ], className='row',
+            style={'width': '100%'}),
+    ]
+
+    return fig, fig2
 
 
 @app.callback(Output('tabs-content-inline', 'children'),
@@ -1244,53 +1127,63 @@ def render_content(tab, input_obj):
                              z=tsne_z, cp=lsm_df)
     if tab == 'tab-1':
         return html.Div([
-            html.Div([
-
-                html.Div([
-
-                    html.A("",
-                           id='chem_name',
-                           href="",
-                           target="_blank"),
-                    html.Br(),
-
-                    html.Img(id='chem_img', src=None, style={'height': '150px', 'width': '150px'}),
-                    html.Div(
-                        id='chem_desc',
-                        style=dict(maxHeight='400px', fontSize='12px')
-                    ),
-
-                ], className='three columns', style=dict(height='300px')),
-                html.Div([
-
-                    html.Div(
-                        id='chem_desc2',
-                        style=dict(maxHeight='400px', fontSize='12px')
-                    ),
-
-                ], className='four columns', style=dict(height='300px')),
-                html.Div([
-                    # dcc.RadioItems(
-                    #     id='charts_radio',
-                    #     options=[
-                    #         dict(label='3D Scatter', value='scatter3d'),
-                    #         dict(label='2D Scatter', value='scatter'),
-                    #         dict(label='2D Histogram', value='histogram2d'),
-                    #     ],
-                    #     labelStyle=dict(display='inline'),
-                    #     value='scatter3d'
-                    # ),
-                    # html.H6('Select Compounds From the Dropdown'),
-                    dcc.Graph(id='clickable-graph',
-                              # style=dict(width='700px'),
-                              hoverData=dict(points=[dict(pointNumber=0)]),
-                              # data = X_embedded
-                              figure=FIGURE
-                              )
-
-                ], className='five columns')
-            ], className='row')
-        ])
+            dcc.Graph(id='clickable-graph',
+                      # style=dict(width='700px'),
+                      hoverData=dict(points=[dict(pointNumber=0)]),
+                      # data = X_embedded
+                      figure=FIGURE
+                      ),
+            html.Img(id='chem_img', src=None, style={'height': '150px', 'width': '150px'}),
+        ], style={'textAlign': 'center'})
+        # return html.Div([
+        #     html.Div([
+        #         html.Div([
+        #
+        #             html.A("",
+        #                    id='chem_name',
+        #                    href="",
+        #                    target="_blank"),
+        #             html.Br(),
+        #
+        #             html.Img(id='chem_img', src=None, style={'height': '150px', 'width': '150px'}),
+        #             html.Div(
+        #                 id='chem_desc',
+        #                 style=dict(maxHeight='400px', fontSize='12px')
+        #             ),
+        #
+        #         ], className='three columns', style=dict(height='300px')),
+        #
+        #
+        #
+        #         html.Div([
+        #             html.Div(
+        #                 id='chem_desc2',
+        #                 style=dict(maxHeight='400px', fontSize='12px')
+        #             ),
+        #         ], className='four columns', style=dict(height='300px')),
+        #
+        #         html.Div([
+        #             # dcc.RadioItems(
+        #             #     id='charts_radio',
+        #             #     options=[
+        #             #         dict(label='3D Scatter', value='scatter3d'),
+        #             #         dict(label='2D Scatter', value='scatter'),
+        #             #         dict(label='2D Histogram', value='histogram2d'),
+        #             #     ],
+        #             #     labelStyle=dict(display='inline'),
+        #             #     value='scatter3d'
+        #             # ),
+        #             # html.H6('Select Compounds From the Dropdown'),
+        #             dcc.Graph(id='clickable-graph',
+        #                       # style=dict(width='700px'),
+        #                       hoverData=dict(points=[dict(pointNumber=0)]),
+        #                       # data = X_embedded
+        #                       figure=FIGURE
+        #                       )
+        #
+        #         ], className='column')
+        #     ], className='row')
+        # ])
     elif tab == 'tab-2':
         return html.Div([
             # html.H6('Select Compounds From the Dropdown'),
@@ -1468,9 +1361,9 @@ def show_lsm_table(chem_dropdown_values, input_obj):
                 html.Table(
                     children=fig,
                     style={"overflowY": "auto",
-                           "height": "150px",
+                           "height": "270px",
                            "maxHeight": "300px",
-                           "border": "1px solid black",
+                           # "border": "1px solid black",
                            "display": "block",
                            "padding": "10px",
                            "marginBottom": "10px"
