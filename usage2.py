@@ -210,90 +210,99 @@ app.layout = html.Div([
 
             #
             , html.Div([
+                # Initial User Inputs
                 html.Div([
-                    # Gene Dropdown, Lincs Slider
+
+                    # Gene Dropdown and SMILES Upload
                     html.Div([
+
                         # Gene Dropdown
                         html.Div([
-                            html.H5('Select a Gene From The Dropdown.', style={'display': 'inline-block'}),
-                            html.Abbr(html.I(className="fa fa-question-circle fa-md"),
-                                      title="Optional SDF File of User Defined Compounds.",
-                                      style={'display': 'inline-block'})
-                        ], style={'marginLeft': '10px', 'display': 'inline-block'}),
-                        dcc.Dropdown(id='gene_dropdown',
-                                     multi=False,
-                                     value=STARTING_DRUG,
-                                     options=[{'label': i, 'value': i} for i in df['GeneName']]),
+                            # Gene Dropdown
+                            html.Div([
+                                html.H5('Select a Gene From The Dropdown.', style={'display': 'inline-block'}),
+                                html.Abbr(html.I(className="fa fa-question-circle fa-md"),
+                                          title="Optional SDF File of User Defined Compounds.",
+                                          style={'display': 'inline-block'})
+                            ], style={'marginLeft': '10px', 'display': 'inline-block'}),
+                            dcc.Dropdown(id='gene_dropdown',
+                                         multi=False,
+                                         value=STARTING_DRUG,
+                                         options=[{'label': i, 'value': i} for i in df['GeneName']]),
 
-                        # lincs slides
+                        ], style={'width': '45vw', 'margin': '15px'}),
+
+                        # SMILES Upload
+                        html.Div([
+                            html.Div([
+                                # html.I(className="fa fa-question fa-lg"),
+                                html.H5('SMILES File of Compounds of Interest (Optional).',
+                                        style={'display': 'inline-block'})
+                                , html.Abbr(html.I(className="fa fa-question-circle fa-md"),
+                                            title="Optional SMILES File of User Defined Compounds in CSV Format with Name and SMILES as Headers.",
+                                            style={'display': 'inline-block'})
+                                , html.A(id='download-link2', children='   Download An Example',
+                                         href="/dash/urlToDownload")
+                            ], style={'marginLeft': '10px', 'display': 'inline-block'}),
+
+                            # dcc.Dropdown(id='chem_dropdown3',
+                            #            multi=True,
+                            #           value=[STARTING_DRUG],
+                            #          options=[{'label': i, 'value': i} for i in df['GeneName']]
+                            #         ),
+                            html.Div([
+                                dcc.Upload(
+                                    id='upload-data',
+                                    children=html.Div([
+                                        '(Optional) Drag and Drop SDF File of Compounds of Interest or ',
+                                        html.A('Select Files')
+                                    ]),
+                                    style={
+                                        'width': '100%',
+                                        'height': '35px',
+                                        'lineHeight': '35px',
+                                        'borderWidth': '1px',
+                                        'borderStyle': 'dashed',
+                                        'borderRadius': '5px',
+                                        'textAlign': 'center',
+                                        'fontSize': '11px'
+                                        # 'margin': '10px'
+                                    },
+                                    # Allow multiple files to be uploaded
+                                    multiple=True
+                                )
+                            ])
+                            # html.Div([
+                            #     html.A(id='download-link', children='Download File'),
+                            #     dcc.Dropdown(
+                            #         id='dropdown',
+                            #         options=[{'label': i, 'value': i} for i in ['NYC', 'LA' 'SF']],
+                            #         value='NYC',
+                            #         clearable=False
+                            #     )
+                            # ])
+                        ], style={'width': '45vw'}),
+
+                    ], className='row',
+                        style={'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'space-between',
+                               'alignItems': 'center', 'width': '98%'}),
+
+                    # lincs slides
+                    html.Div([
                         html.H6(
                             'Select number of LINCS Compounds, Condordant to the Selected Gene KnockDown Signatures.',
                             style={'display': 'inline-block'}),
-                        html.Div(
-                            dcc.Slider(
-                                id='compound_slider',
-                                min=0,
-                                max=400,
-                                step=50,
-                                value=100,
-                                marks={i: '{}'.format(i) for i in range(0, 401, 50)}
+                        dcc.Slider(
+                            id='compound_slider',
+                            min=0,
+                            max=400,
+                            step=50,
+                            value=100,
+                            marks={i: '{}'.format(i) for i in range(0, 401, 50)}
 
-                            ), style={'width': '90%'}
                         )
-                    ]),
-
-                    # SMILES Upload
-                    html.Div([
-                        html.Div([
-                            # html.I(className="fa fa-question fa-lg"),
-                            html.H5('SMILES File of Compounds of Interest (Optional).',
-                                    style={'display': 'inline-block'})
-                            , html.Abbr(html.I(className="fa fa-question-circle fa-md"),
-                                        title="Optional SMILES File of User Defined Compounds in CSV Format with Name and SMILES as Headers.",
-                                        style={'display': 'inline-block'})
-                            , html.A(id='download-link2', children='   Download An Example',
-                                     href="/dash/urlToDownload")
-                        ], style={'marginLeft': '10px', 'display': 'inline-block'}),
-
-                        # dcc.Dropdown(id='chem_dropdown3',
-                        #            multi=True,
-                        #           value=[STARTING_DRUG],
-                        #          options=[{'label': i, 'value': i} for i in df['GeneName']]
-                        #         ),
-                        html.Div([
-                            dcc.Upload(
-                                id='upload-data',
-                                children=html.Div([
-                                    '(Optional) Drag and Drop SDF File of Compounds of Interest or ',
-                                    html.A('Select Files')
-                                ]),
-                                style={
-                                    'width': '100%',
-                                    'height': '35px',
-                                    'lineHeight': '35px',
-                                    'borderWidth': '1px',
-                                    'borderStyle': 'dashed',
-                                    'borderRadius': '5px',
-                                    'textAlign': 'center',
-                                    'fontSize': '11px'
-                                    # 'margin': '10px'
-                                },
-                                # Allow multiple files to be uploaded
-                                multiple=True
-                            )
-                        ])
-                        # html.Div([
-                        #     html.A(id='download-link', children='Download File'),
-                        #     dcc.Dropdown(
-                        #         id='dropdown',
-                        #         options=[{'label': i, 'value': i} for i in ['NYC', 'LA' 'SF']],
-                        #         value='NYC',
-                        #         clearable=False
-                        #     )
-                        # ])
-                    ]),
-
-                ], style={'width': '98%'}),
+                    ], style={'width': '98%'}),
+                ], style={'marginLeft': '40px'}),
 
                 # heatmap
                 html.Div([
@@ -320,7 +329,7 @@ app.layout = html.Div([
                             }
                         )
                     ], type="circle")
-                ]),
+                ], style={'height': '1050px'}),
 
                 # selected compounds, post - heatmap
                 html.Div(
@@ -346,7 +355,7 @@ app.layout = html.Div([
             , html.Div(
                 id='table_and_selection'
             )
-        ], className='twelve columns', style={'backgroundColor': 'white', 'padding': '25px'})
+        ], className='twelve columns', style={'backgroundColor': 'white', 'alignContent': 'center', 'padding': '40px'})
     ], className='twelve columns', style={'backgroundColor': 'white', 'paddingBottom': '20px', 'minHeight': '100%'}
     ),
 
@@ -425,7 +434,7 @@ app.layout = html.Div([
                'overflow': 'hidden', 'position': 'fixed'}
     )
 ], className='twelve columns',
-    style={'height': '1600px', 'alignContent': 'center'}
+    style={'height': '1600px', 'marginRight': '0'}
 
 )
 
@@ -1084,7 +1093,7 @@ def update_post_process(input_obj):
                 # dcc.Tab(label='Tab 4', value='tab-4', style=tab_style, selected_style=tab_selected_style),
             ], style=tabs_styles),
 
-            html.Div(id='tabs-content-inline', style={"marginTop": "15px"}),
+            html.Div(id='tabs-content-inline', style={"marginTop": "30px"}),
         ],  # className='six columns',
             style={'width': '600px'}),
     ]
