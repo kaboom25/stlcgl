@@ -83,11 +83,6 @@ app.layout = html.Div([
 app.scripts.config.serve_locally = True
 app.css.config.serve_locally = True
 
-print('loading JSON Clustergrammer data...')
-with open('mult_view.json', 'r') as f:
-    network_data = json.load(f)
-print('done')
-
 STARTING_DRUG = 'BCL2A1'
 df = pd.read_csv('KDgenes.txt', sep="\n")
 # print(df)
@@ -298,12 +293,7 @@ app.layout = html.Div([
                         # ])
                     ]),
 
-                    # selected compounds, post - heatmap
-                    html.Div(
-                        id='post-process',
-                        style={'width': '50%'}
-                    ),
-                ]),
+                ], style={'width': '98%'}),
 
                 # heatmap
                 html.Div([
@@ -316,7 +306,7 @@ app.layout = html.Div([
                                 stlcgl.Cgl(
                                     id='cgram-component',
                                     divId='id_',
-                                    network=json.dumps(network_data),
+                                    network='',
                                 ),
                             ]),
                             className='eight columns',
@@ -324,6 +314,7 @@ app.layout = html.Div([
                                 # 'position': 'absolute',
                                 'left': '15px',
                                 'height': '1000px',
+                                'minHeight': '1000px',
                                 'minWidth': '900px',
                                 # 'border': '1px solid red'
                             }
@@ -331,7 +322,14 @@ app.layout = html.Div([
                     ], type="circle")
                 ]),
 
-            ], style={'display': 'flex', 'flexDirection': 'row', 'flexWrap': 'wrap', 'paddingRight': '0px'})
+                # selected compounds, post - heatmap
+                html.Div(
+                    id='post-process',
+                    style={'width': '100%',
+                           'margin': '15px'}
+                ),
+
+            ], style={'display': 'flex', 'flexDirection': 'column', 'alignItems': 'center', 'width': '90%'})
             # , html.Div([
             #     html.Div([
             #         html.Div([
@@ -427,7 +425,7 @@ app.layout = html.Div([
                'overflow': 'hidden', 'position': 'fixed'}
     )
 ], className='twelve columns',
-    style={'height': '1600px'}
+    style={'height': '1600px', 'alignContent': 'center'}
 
 )
 
@@ -726,6 +724,8 @@ COLORSCALE = [[0, "rgb(244,236,21)"], [0.3, "rgb(249,210,41)"], [0.4, "rgb(134,1
 def add_markers(figure_data, molecules, plot_type='scatter3d'):
     indices = []
     drug_data = figure_data[0]
+    print('IN ADD DATA')
+    print(drug_data['text'])
     for m in molecules:
         hover_text = drug_data['text']
         for i in range(len(hover_text)):
@@ -741,12 +741,13 @@ def add_markers(figure_data, molecules, plot_type='scatter3d'):
             x=[drug_data['x'][point_number]],
             y=[drug_data['y'][point_number]],
             marker=dict(
-                color='black',
+                color='rgb(0,0,255)',
                 size=10,
-                opacity=0.6,
+                opacity=0.8,
                 symbol='crosscross'
             ),
-            type=plot_type
+            type=plot_type,
+            text=[drug_data['text'][point_number]]
         )
 
         if plot_type == 'scatter3d':
@@ -769,6 +770,7 @@ def scatter_plot_3d(
         zlabel='z',
         plot_type='scatter3d',
         markers=[],
+        to_highlight=[]
 ):
     def axis_template_3d(title, type='linear'):
         return dict(
@@ -800,7 +802,6 @@ def scatter_plot_3d(
     # y = cp_df['y']
     # z = cp_df['z']
     data = [dict(
-
         x=x,
         y=y,
         z=z,
@@ -865,6 +866,8 @@ def scatter_plot_3d(
         layout['font']['color'] = 'white'
 
     if len(markers) > 0:
+        highlight_trace = []
+
         data = data + add_markers(data, markers, plot_type=plot_type)
 
     return dict(data=data, layout=layout)
@@ -958,10 +961,14 @@ def update_cgrammer(input_obj, gene, slider):
 @app.callback(Output('lsm_dropdown', 'value'), [Input('cgram-component', 'value')])
 def cgl_selected_to_lsm_dropdown(selected):
     print('callback working')
+    used = []
     ret = ''
     if isinstance(selected, str):
         for item in selected.split(','):
-            ret += item[:item.index('-', 4)] + ','
+            cur_lsm = item[:item.index('-', 4)]
+            if not cur_lsm in used:
+                used.append(cur_lsm)
+                ret += item[:item.index('-', 4)] + ','
         ret = ret[:-1]
 
     # print(ret)
@@ -1108,6 +1115,10 @@ def render_content(tab, input_obj):
     network_obj = json.loads(input_obj)
     lsm_df = network_obj["compounds"]
     network_data = network_obj["cgram_obj"]
+
+    print('HIGHLIGH_NODES')
+    print(input_obj)
+
     # print network_data
     new_network = network_data
     # X = network_data['mat']
@@ -1127,14 +1138,29 @@ def render_content(tab, input_obj):
                              z=tsne_z, cp=lsm_df)
     if tab == 'tab-1':
         return html.Div([
-            dcc.Graph(id='clickable-graph',
-                      # style=dict(width='700px'),
-                      hoverData=dict(points=[dict(pointNumber=0)]),
-                      # data = X_embedded
-                      figure=FIGURE
-                      ),
-            html.Img(id='chem_img', src=None, style={'height': '150px', 'width': '150px'}),
-        ], style={'textAlign': 'center'})
+            html.Div(
+                id='3d_graph_div',
+                children=[
+                    dcc.Graph(id='clickable-graph',
+                              # style=dict(width='700px'),
+                              hoverData=dict(points=[dict(pointNumber=0)]),
+                              # data = X_embedded
+                              figure=FIGURE
+                              ),
+                ]
+            ),
+            html.Div([
+                html.Div(id='chem_name'),
+                html.Div(id='chem_desc'),
+                html.Div(id='chem_desc2'),
+                html.Img(id='chem_img', src=None, style={'height': '150px', 'width': '150px'}),
+            ], style={'display': 'flex',
+                      'flexDirection': 'row',
+                      'width': '100%',
+                      'justifyContent': 'space-between',
+                      'alignItems': 'center'
+                      })
+        ], style={'display': 'flex', 'flexDirection': 'row'})
         # return html.Div([
         #     html.Div([
         #         html.Div([
@@ -1392,7 +1418,7 @@ def show_lsm_table(chem_dropdown_values, input_obj):
 
 
 @app.callback(
-    Output('clickable-graph', 'figure'),
+    Output('3d_graph_div', 'children'),
     [Input('lsm_dropdown', 'value'),
      Input('intermediate-value', 'children')])
 def highlight_molecule(chem_dropdown_values, input_obj):
@@ -1430,10 +1456,18 @@ def highlight_molecule(chem_dropdown_values, input_obj):
         # print "tsne"
         # print X_embedded
         # print X_embedded.shape
+
         FIGURE = scatter_plot_3d(markers=chem_dropdown_values.split(','), plot_type='scatter3d', x=tsne_x, y=tsne_y,
                                  z=tsne_z, cp=lsm_df)
+        # FIGURE = scatter_plot_3d(markers=[], plot_type='scatter3d', x=tsne_x, y=tsne_y,
+        #                          z=tsne_z, cp=lsm_df)
 
-        return FIGURE
+        return dcc.Graph(id='clickable-graph',
+                         # style=dict(width='700px'),
+                         hoverData=dict(points=[dict(pointNumber=0)]),
+                         # data = X_embedded
+                         figure=FIGURE
+                         ),
 
 
 #
@@ -1454,12 +1488,10 @@ def highlight_molecule(chem_dropdown_values, input_obj):
 @app.callback(
     Output('chem_desc', 'children'),
     [Input('clickable-graph', 'hoverData')])
-def display_molecule(hoverData):
+def display_molecule_2(hoverData):
     # "http://lincsportal.ccs.miami.edu/dcic/api/fetchmolecules?searchTerm=lincsidentifier:LSM-42782"
     if hoverData is not None:
         try:
-            lsm = hoverData['points'][0]['text']
-            lsm = hoverData['points'][0]['text']
             lsm = hoverData['points'][0]['text']
 
             # "http://www.ilincs.org/api/CompoundMOAs?filter=%7B%22where%22%3A%7B%22lincsPertID%22%3A%22{}1%22%7D%7D".format(lsm)
@@ -1575,7 +1607,7 @@ def display_molecule(hoverData):
         return
 
 
-#
+# hover to image
 @app.callback(
     Output('chem_img', 'src'),
     [Input('clickable-graph', 'hoverData')])
@@ -1585,6 +1617,7 @@ def display_image(hoverData):
     #     return
     if hoverData is not None:
         try:
+            print(hoverData['points'])
             lsm = hoverData['points'][0]['text']
             img_src = "http://life.ccs.miami.edu/life/web/images/sm-images/400/{}.png".format(lsm)
             return img_src

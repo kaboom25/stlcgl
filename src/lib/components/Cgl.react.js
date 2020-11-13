@@ -10020,25 +10020,25 @@ export default class Cgl extends Component {
 
         if(this.props.network == ''){
           console.log('DEFAULT NETWORK')
-          network = defNetwork
+          // document.getElementById(this.props.id).innerHTML = 'Loading Heatmap'
+
+
         } else {
           network = JSON.parse(this.props.network)
+          // set matrix colors
+          network.matrix_colors = {}
+          network.matrix_colors.pos = 'red'
+          network.matrix_colors.neg = 'blue'
+          let args = {}
+          args.network = network;
+          args.container=inst_container;
+          args.viz_width=inst_width;
+          args.viz_height=inst_height;
+          args.reactComp=this;
+          args.dendro_click_callback = my_dendro_click_callback
+
+          cgm = CGM(args);
         }
-
-        // set matrix colors
-        network.matrix_colors = {}
-        network.matrix_colors.pos = 'red'
-        network.matrix_colors.neg = 'blue'
-        let args = {}
-        args.network = network;
-        args.container=inst_container;
-        args.viz_width=inst_width;
-        args.viz_height=inst_height;
-        args.reactComp=this;
-        args.dendro_click_callback = my_dendro_click_callback
-
-        cgm = CGM(args);
-        this.numMounts++
     }
 
     componentDidMount() {
@@ -10051,7 +10051,11 @@ export default class Cgl extends Component {
       this._ismounted = false;
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    // shouldComponentUpdate(nextProps, nextState, nextContext) {
+    //   // document.getElementById(this.props.id).innerHTML = 'Loading Heatmap'
+    // }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
       console.log('COMPONENT UPDATE')
       if(prevProps.network != this.props.network){
         // this.props.setProps({divId: 'id_' + Math.floor(Math.random() * 10000)})

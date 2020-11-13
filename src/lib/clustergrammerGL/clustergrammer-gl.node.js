@@ -70309,6 +70309,7 @@ module.exports = function build_control_panel(){
     .style('margin-top','10px')
     .style('top', '37px')
     .style('left', '440px')
+    .style('display', 'none')
 
   let root_id = cgm.params.root.replace('#', '')
 
@@ -70323,7 +70324,7 @@ module.exports = function build_control_panel(){
     .style('width', '125px')
     .style('height', '20px')
     .style('margin-top', '5px')
-    .style('display', 'inline-block')
+    .style('display', 'none')
     .style('padding', '1pt 2pt')
 
   let row_names = params.network.row_node_names
@@ -70343,7 +70344,7 @@ module.exports = function build_control_panel(){
     .classed('row_search_button',true)
     .style('margin-top', '5px')
     .style('margin-left', '5px')
-    .style('display', 'inline-block')
+    .style('display', 'none')
     .attr('data-toggle','buttons')
     .append('button')
     .classed('sidebar_text', true)
