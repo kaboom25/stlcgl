@@ -304,41 +304,44 @@ app.layout = html.Div([
                     ], style={'width': '98%'}),
                 ], style={'marginLeft': '40px'}),
 
-                # heatmap
+                # heatmap and post process
                 html.Div([
-                    # heatmap loading
-                    dcc.Loading(id="loading-2", children=[
-                        # heatmap
-                        html.Div(
-                            id='heatmap',
-                            children=html.Div([
-                                stlcgl.Cgl(
-                                    id='cgram-component',
-                                    divId='id_',
-                                    network='',
-                                ),
-                            ]),
-                            className='eight columns',
-                            style={  # 'margin': '10px',
-                                # 'position': 'absolute',
-                                'left': '15px',
-                                'height': '1000px',
-                                'minHeight': '1000px',
-                                'minWidth': '900px',
-                                # 'border': '1px solid red'
-                            }
-                        )
-                    ], type="circle")
-                ], style={'height': '1050px'}),
+                    # heatmap
+                    html.Div([
+                        # heatmap loading
+                        dcc.Loading(id="loading-2", children=[
+                            # heatmap
+                            html.Div(
+                                id='heatmap',
+                                children=html.Div([
+                                    stlcgl.Cgl(
+                                        id='cgram-component',
+                                        divId='id_',
+                                        network='',
+                                    ),
+                                ]),
+                                className='eight columns',
+                                style={  # 'margin': '10px',
+                                    # 'position': 'absolute',
+                                    'left': '15px',
+                                    'height': '1000px',
+                                    'minHeight': '1000px',
+                                    'minWidth': '900px',
+                                    # 'border': '1px solid red'
+                                }
+                            )
+                        ], type="circle")
+                    ], style={'height': '1050px'}),
 
-                # selected compounds, post - heatmap
-                html.Div(
-                    id='post-process',
-                    style={'width': '100%',
-                           'margin': '15px'}
-                ),
+                    # selected compounds, post - heatmap
+                    html.Div(
+                        id='post-process',
+                        style={'width': '100%',
+                               'margin': '15px'}
+                    ),
+                ], style={'display': 'flex', 'direction': 'row'}),
 
-            ], style={'display': 'flex', 'flexDirection': 'column', 'alignItems': 'center', 'width': '90%'})
+            ], style={'display': 'flex', 'flexDirection': 'column', 'width': '90%'})
             # , html.Div([
             #     html.Div([
             #         html.Div([
@@ -1169,7 +1172,7 @@ def render_content(tab, input_obj):
                       'justifyContent': 'space-between',
                       'alignItems': 'center'
                       })
-        ], style={'display': 'flex', 'flexDirection': 'row'})
+        ], style={'display': 'flex', 'flexDirection': 'column'})
         # return html.Div([
         #     html.Div([
         #         html.Div([
