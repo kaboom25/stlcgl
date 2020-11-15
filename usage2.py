@@ -191,7 +191,7 @@ app.layout = html.Div([
                         #     className='right hide-on-med-and-down'
                         # ),
                     ], className=' nav-wrapper'
-                    ), style={'backgroundColor': 'white', 'paddingTop': '10px'}
+                    ), style={'backgroundColor': 'white', 'paddingTop': '10px', 'paddingLeft': '10px'}
                 ),
             ], className='navbar-fixed'
             )
@@ -208,11 +208,10 @@ app.layout = html.Div([
                           type="default")
             , html.Div(id='output-data-upload')
 
-            #
             , html.Div([
+
                 # Initial User Inputs
                 html.Div([
-
                     # Gene Dropdown and SMILES Upload
                     html.Div([
 
@@ -222,15 +221,16 @@ app.layout = html.Div([
                             html.Div([
                                 html.H5('Select a Gene From The Dropdown.', style={'display': 'inline-block'}),
                                 html.Abbr(html.I(className="fa fa-question-circle fa-md"),
-                                          title="Optional SDF File of User Defined Compounds.",
-                                          style={'display': 'inline-block'})
-                            ], style={'marginLeft': '10px', 'display': 'inline-block'}),
+                                          title="Optional SDF File of User Defined Compounds."
+                                          # style={'display': 'inline-blo'marginLeft': '10px', ck'}
+                                          )
+                            ], style={'display': 'inline-block'}),
                             dcc.Dropdown(id='gene_dropdown',
                                          multi=False,
                                          value=STARTING_DRUG,
                                          options=[{'label': i, 'value': i} for i in df['GeneName']]),
 
-                        ], style={'width': '45vw', 'margin': '15px'}),
+                        ], style={'width': '45vw', 'margin': '0px'}),
 
                         # SMILES Upload
                         html.Div([
@@ -281,17 +281,18 @@ app.layout = html.Div([
                             #         clearable=False
                             #     )
                             # ])
-                        ], style={'width': '45vw'}),
+                        ], style={'width': '45vw', 'margin': '0px'}),
 
                     ], className='row',
                         style={'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'space-between',
-                               'alignItems': 'center', 'width': '98%'}),
+                               'alignItems': 'center', 'width': '98vw'}),
 
                     # lincs slides
                     html.Div([
                         html.H6(
                             'Select number of LINCS Compounds, Condordant to the Selected Gene KnockDown Signatures.',
-                            style={'display': 'inline-block'}),
+                            # style={'display': 'inline-block'}
+                        ),
                         dcc.Slider(
                             id='compound_slider',
                             min=0,
@@ -301,15 +302,17 @@ app.layout = html.Div([
                             marks={i: '{}'.format(i) for i in range(0, 401, 50)}
 
                         )
-                    ], style={'width': '98%'}),
-                ], style={'marginLeft': '40px'}),
+                    ], style={'width': '98vw'}),
+                ], style={'marginLeft': '20px', 'width': '100vw'}),
 
                 # heatmap and post process
                 html.Div([
                     # heatmap
                     html.Div([
+
                         # heatmap loading
                         dcc.Loading(id="loading-2", children=[
+
                             # heatmap
                             html.Div(
                                 id='heatmap',
@@ -320,10 +323,10 @@ app.layout = html.Div([
                                         network='',
                                     ),
                                 ]),
-                                className='eight columns',
+                                # className='eight columns',
                                 style={  # 'margin': '10px',
                                     # 'position': 'absolute',
-                                    'left': '15px',
+                                    'left': '5px',
                                     'height': '1000px',
                                     'minHeight': '1000px',
                                     'minWidth': '900px',
@@ -331,17 +334,23 @@ app.layout = html.Div([
                                 }
                             )
                         ], type="circle")
-                    ], style={'height': '1050px'}),
+                    ], style={'height': '1050px', 'width': '900px'}),
 
-                    # selected compounds, post - heatmap
-                    html.Div(
-                        id='post-process',
-                        style={'width': '100%',
-                               'margin': '15px'}
-                    ),
-                ], style={'display': 'flex', 'direction': 'row'}),
+                    # post process and table
+                    html.Div([
+                        html.Div(
+                            id='post-process',
+                            style={'margin': '5px'}
+                        ),
+                        html.Div(
+                            id='table_and_selection'
+                        ),
 
-            ], style={'display': 'flex', 'flexDirection': 'column', 'width': '90%'})
+                    ], style={'display': 'flex', 'flexDirection': 'column', 'marginLeft': '10px'}),
+
+                ], style={'width': '100vw', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'space-between'}),
+
+            ], style={'display': 'flex', 'flexDirection': 'column', 'width': '100vw', 'alignContent': 'space-between'})
             # , html.Div([
             #     html.Div([
             #         html.Div([
@@ -354,11 +363,7 @@ app.layout = html.Div([
             #     ], className='twelve columns')
             #
             # ], className='row')
-
-            , html.Div(
-                id='table_and_selection'
-            )
-        ], className='twelve columns', style={'backgroundColor': 'white', 'alignContent': 'center', 'padding': '40px'})
+        ], className='twelve columns', style={'backgroundColor': 'white', 'padding': '0px'})
     ], className='twelve columns', style={'backgroundColor': 'white', 'paddingBottom': '20px', 'minHeight': '100%'}
     ),
 
@@ -1098,7 +1103,7 @@ def update_post_process(input_obj):
 
             html.Div(id='tabs-content-inline', style={"marginTop": "30px"}),
         ],  # className='six columns',
-            style={'width': '600px'}),
+            style={'width': '400px'}),
     ]
 
     fig2 = [
@@ -1109,12 +1114,16 @@ def update_post_process(input_obj):
                 multi=True,
                 value=selected_dropdown_values,
                 options=[{'label': i, 'value': i} for i in lsm_df],
-                style={'display': 'block',
-                       'maxHeight': '150px'}
+                style={
+                    # 'display': 'block',
+                    'maxHeight': '200px'
+                }
             ),
             html.Div(id="lsm_table", children=[html.P("selected LSM info will appear here")], ),
         ], className='row',
-            style={'width': '100%'}),
+            style={
+                # 'width': '100vw'
+            }),
     ]
 
     return fig, fig2
@@ -1167,8 +1176,8 @@ def render_content(tab, input_obj):
                 html.Div(id='chem_desc2'),
                 html.Img(id='chem_img', src=None, style={'height': '150px', 'width': '150px'}),
             ], style={'display': 'flex',
-                      'flexDirection': 'row',
-                      'width': '100%',
+                      'flexDirection': 'column',
+                      # 'width': '100vw',
                       'justifyContent': 'space-between',
                       'alignItems': 'center'
                       })
@@ -1311,7 +1320,7 @@ def show_lsm_table(chem_dropdown_values, input_obj):
                                             'marginLeft': '30px'}))
                 img_src = "http://life.ccs.miami.edu/life/web/images/sm-images/400/{}.png".format(lsm)
                 print(img_src)
-                c2.append(html.Img(src=img_src, style={'height': '120px', 'width': '120px'}))
+                # c2.append(html.Img(src=img_src, style={'height': '120px', 'width': '120px'}))
                 # if len(data) > 0:
                 #
                 #     if data[0]['geneTargets']:
