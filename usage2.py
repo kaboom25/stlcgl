@@ -348,7 +348,7 @@ app.layout = html.Div([
 
                     ], style={'display': 'flex', 'flexDirection': 'column', 'marginLeft': '10px'}),
 
-                ], style={'width': '100vw', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'space-between'}),
+                ], style={'width': '100vw', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'space-around'}),
 
             ], style={'display': 'flex', 'flexDirection': 'column', 'width': '100vw', 'alignContent': 'space-between'})
             # , html.Div([
@@ -1115,8 +1115,11 @@ def update_post_process(input_obj):
                 value=selected_dropdown_values,
                 options=[{'label': i, 'value': i} for i in lsm_df],
                 style={
-                    # 'display': 'block',
-                    'maxHeight': '200px'
+                    'display': 'block',
+                    'height': '150px',
+                    'minHeight': '150px',
+                    'maxHeight': '150px',
+                    'overflowY': 'scroll'
                 }
             ),
             html.Div(id="lsm_table", children=[html.P("selected LSM info will appear here")], ),
