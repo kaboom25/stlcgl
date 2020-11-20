@@ -204,8 +204,8 @@ app.layout = html.Div([
             , html.Hr([], style={'height': '1px', 'color': 'steelBlue', 'border': 'none', 'color': 'steelBlue',
                                  'backgroundColor': 'steelBlue', 'marginTop': '40px'})
             # Hidden div inside the app that stores the intermediate value
-            , dcc.Loading(id="loading-1", children=[html.Div(id='intermediate-value', style={'display': 'none'})],
-                          type="default")
+            # , dcc.Loading(id="loading-1", children=[html.Div(id='intermediate-value', style={'display': 'none'})],
+            #               type="default")
             , html.Div(id='output-data-upload')
 
             , html.Div([
@@ -301,15 +301,23 @@ app.layout = html.Div([
                             value=100,
                             marks={i: '{}'.format(i) for i in range(0, 401, 50)}
 
-                        )
-                    ], style={'width': '98vw'}),
-                ], style={'marginLeft': '20px', 'width': '100vw'}),
+                        ),
+
+                    ], style={'width': '50vw'}),
+
+                    # Intermediate value
+                    html.Div([
+                        dcc.Loading(id="loading-1",
+                                    children=[html.Div(id='intermediate-value', style={'display': 'none'})],
+                                    type="default"),
+                    ])
+
+                ], style={'marginLeft': '25px', 'width': '50vw'}),
 
                 # heatmap and post process
                 html.Div([
                     # heatmap
                     html.Div([
-
                         # heatmap loading
                         dcc.Loading(id="loading-2", children=[
 
@@ -330,25 +338,31 @@ app.layout = html.Div([
                                     'height': '1000px',
                                     'minHeight': '1000px',
                                     'minWidth': '900px',
+                                    # 'border': '1px solid black'
                                     # 'border': '1px solid red'
                                 }
                             )
                         ], type="circle")
-                    ], style={'height': '1050px', 'width': '900px'}),
+                    ], style={'height': '1050px', 'width': '950px', 'border': '2px solid black'}),
 
                     # post process and table
                     html.Div([
                         html.Div(
                             id='post-process',
-                            style={'margin': '5px'}
+                            style={'margin': '5px', 'border': '2px solid black', 'height': '75vh'}
                         ),
                         html.Div(
-                            id='table_and_selection'
+                            id='table_and_selection',
+                            style={'margin': '5px', 'height': '25vh'}
                         ),
 
-                    ], style={'display': 'flex', 'flexDirection': 'column', 'marginLeft': '10px'}),
+                    ], style={'display': 'flex', 'flexDirection': 'column', 'marginLeft': '10px', 'minHeight': '100vh',
+                              'minWidth': '300px'}),
 
-                ], style={'width': '100vw', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'space-around'}),
+                ], id='heatmap_and_post_process',
+                    style={'width': '95vw', 'maxWidth': '1500px', 'display': 'flex', 'flexDirection': 'row',
+                           'justifyContent': 'flex-start',
+                           'marginTop': '20px', 'minHeight': '1100px'}),
 
             ], style={'display': 'flex', 'flexDirection': 'column', 'width': '100vw', 'alignContent': 'space-between'})
             # , html.Div([
@@ -363,8 +377,8 @@ app.layout = html.Div([
             #     ], className='twelve columns')
             #
             # ], className='row')
-        ], className='twelve columns', style={'backgroundColor': 'white', 'padding': '0px'})
-    ], className='twelve columns', style={'backgroundColor': 'white', 'paddingBottom': '20px', 'minHeight': '100%'}
+        ], className='twelve columns', style={'backgroundColor': 'white', 'padding': '15px'})
+    ], className='twelve columns', style={'backgroundColor': 'grey', 'paddingBottom': '20px', 'minHeight': '100%'}
     ),
 
     html.Footer(
@@ -890,9 +904,9 @@ def scatter_plot_3d(
     return dict(data=data, layout=layout)
 
 
-@app.callback(Output('intermediate-value', 'children'), [Input('upload-data', 'contents'),
-                                                         Input('gene_dropdown', 'value'),
-                                                         Input('compound_slider', 'value')],
+@app.callback([Output('intermediate-value', 'children')], [Input('upload-data', 'contents'),
+                                                           Input('gene_dropdown', 'value'),
+                                                           Input('compound_slider', 'value')],
               [State('upload-data', 'filename'),
                State('upload-data', 'last_modified')])
 def make_network_obj(list_of_contents, gene, num_compounds, list_of_names, list_of_dates):
@@ -913,7 +927,8 @@ def make_network_obj(list_of_contents, gene, num_compounds, list_of_names, list_
         f.write(str(network_obj))
         f.close()
         # print('set net_obj: ' + network_obj)
-        return network_obj
+
+        return [network_obj]
 
 
 @app.callback(Output('cgram-component', 'network'),
@@ -1101,32 +1116,34 @@ def update_post_process(input_obj):
                 # dcc.Tab(label='Tab 4', value='tab-4', style=tab_style, selected_style=tab_selected_style),
             ], style=tabs_styles),
 
-            html.Div(id='tabs-content-inline', style={"marginTop": "30px"}),
+            html.Div(id='tabs-content-inline', style={}),
         ],  # className='six columns',
-            style={'width': '400px'}),
+            style={}),
     ]
 
     fig2 = [
         html.Div([
-            html.H6('Select Compounds From the Dropdown'),
-            dcc.Dropdown(
-                id='lsm_dropdown',
-                multi=True,
-                value=selected_dropdown_values,
-                options=[{'label': i, 'value': i} for i in lsm_df],
-                style={
-                    'display': 'block',
-                    'height': '150px',
-                    'minHeight': '150px',
-                    'maxHeight': '150px',
-                    'overflowY': 'scroll'
-                }
-            ),
-            html.Div(id="lsm_table", children=[html.P("selected LSM info will appear here")], ),
-        ], className='row',
-            style={
-                # 'width': '100vw'
-            }),
+            html.Div([
+                html.H6('Select Compounds From the Dropdown'),
+                dcc.Dropdown(
+                    id='lsm_dropdown',
+                    multi=True,
+                    value=selected_dropdown_values,
+                    options=[{'label': i, 'value': i} for i in lsm_df],
+                    style={
+                        # 'display': 'block',
+                        # 'height': '100px',
+                        # 'minHeight': '100px',
+                        'maxHeight': '100px',
+                        'overflowY': 'scroll'
+                    }
+                ),
+            ], style={'border': '2px solid black', 'marginBottom': '5px'}),
+
+            html.Div([
+                html.P("selected LSM info will appear here")
+            ], id='lsm_table', style={'minWidth': '400px', 'maxHeight': '250px', 'border': '2px solid black'})
+        ]),
     ]
 
     return fig, fig2
@@ -1174,15 +1191,21 @@ def render_content(tab, input_obj):
                 ]
             ),
             html.Div([
-                html.Div(id='chem_name'),
+                html.A(
+                    "",
+                    id='chem_name',
+                    href="",
+                    target="_blank"
+                ),
                 html.Div(id='chem_desc'),
                 html.Div(id='chem_desc2'),
                 html.Img(id='chem_img', src=None, style={'height': '150px', 'width': '150px'}),
             ], style={'display': 'flex',
-                      'flexDirection': 'column',
+                      'flexDirection': 'row',
                       # 'width': '100vw',
-                      'justifyContent': 'space-between',
-                      'alignItems': 'center'
+                      'justifyContent': 'space-around',
+                      'alignItems': 'center',
+                      'marginBottom': '35px'
                       })
         ], style={'display': 'flex', 'flexDirection': 'column'})
         # return html.Div([
@@ -1383,13 +1406,13 @@ def show_lsm_table(chem_dropdown_values, input_obj):
                         style={"paddingTop": "2px", "paddingBottom": "2px", "marginTop": "2px", "marginBottom": "2px",
                                "fontWeight": "300"}))
                     iterator += 1
+
                 html_row = html.Div([
                     # html.Div(c1),
                     # html.Div(c2),
                     # html.Div(c3),
                     # html.Div(c4)
-                    html.Div(c1, className='two columns'),
-                    html.Div(c2, className='two columns'),
+                    html.Div(c1, className='four columns'),
                     html.Div(c3, className='four columns'),
                     html.Div(c4, className='four columns')
                     # ,
@@ -1400,7 +1423,8 @@ def show_lsm_table(chem_dropdown_values, input_obj):
                     #      c3
                     # ], className='six columns')
 
-                ], className='row')
+                ], className='row',
+                    style={'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'space-between'})
 
                 fig.append(html_row)
                 fig.append(html.Hr(style={"marginTop": "2px", "marginBottom": "2px", 'color': 'steelBlue',
@@ -1416,7 +1440,7 @@ def show_lsm_table(chem_dropdown_values, input_obj):
                            # "border": "1px solid black",
                            "display": "block",
                            "padding": "10px",
-                           "marginBottom": "10px"
+                           "marginBottom": "20px"
                            }
                 )
             ], type='circle'
@@ -1430,14 +1454,6 @@ def show_lsm_table(chem_dropdown_values, input_obj):
             children=[html.P(
                 'LSM Info will appear here'
             )],
-            style={"overflowY": "auto",
-                   "height": "150px",
-                   "maxHeight": "300px",
-                   "border": "1px solid black",
-                   "display": "block",
-                   "padding": "10px",
-                   "marginBottom": "10px"
-                   }
         )
 
 

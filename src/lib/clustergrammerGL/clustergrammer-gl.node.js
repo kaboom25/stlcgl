@@ -72912,6 +72912,10 @@ module.exports = function initialize_containers(){
   d3.select(canvas_container)
     .style('height',inst_height + 'px')
     .style('width',inst_width+'px');
+    // .style('border', '1px solid red');
+    // .style('outline', 'thin solid red');
+
+
 
   // console.log(canvas_container)
   this.canvas_container = canvas_container;
