@@ -343,13 +343,13 @@ app.layout = html.Div([
                                 }
                             )
                         ], type="circle")
-                    ], style={'height': '1050px', 'width': '950px', 'border': '2px solid black'}),
+                    ], style={'height': '1050px', 'width': '950px', 'border': '2px solid grey',  'borderRadius': '5px'}),
 
                     # post process and table
                     html.Div([
                         html.Div(
                             id='post-process',
-                            style={'margin': '5px', 'border': '2px solid black', 'height': '75vh'}
+                            style={'margin': '5px', 'border': '2px solid grey', 'borderRadius': '5px',  'height': '75vh'}
                         ),
                         html.Div(
                             id='table_and_selection',
@@ -1138,11 +1138,11 @@ def update_post_process(input_obj):
                         'overflowY': 'scroll'
                     }
                 ),
-            ], style={'border': '2px solid black', 'marginBottom': '5px'}),
+            ], style={'border': '2px solid grey', 'borderRadius': '5px', 'marginBottom': '5px'}),
 
             html.Div([
                 html.P("selected LSM info will appear here")
-            ], id='lsm_table', style={'minWidth': '400px', 'maxHeight': '250px', 'border': '2px solid black'})
+            ], id='lsm_table', style={'minWidth': '400px', 'maxHeight': '250px', 'border': '2px solid grey', 'borderRadius': '5px'})
         ]),
     ]
 
@@ -1438,7 +1438,7 @@ def show_lsm_table(chem_dropdown_values, input_obj):
                            "height": "270px",
                            "maxHeight": "300px",
                            # "border": "1px solid black",
-                           "display": "block",
+                           #"display": "block",
                            "padding": "10px",
                            "marginBottom": "20px"
                            }

@@ -3,11 +3,7 @@ import PropTypes from 'prop-types';
 import CGM from '../clustergrammerGL/clustergrammer-gl.node'
 
 /**
- * ExampleComponent is an example component.
- * It takes a property, `label`, and
- * displays it.
- * It renders an input with the property `value`
- * which is editable by the user.
+ * Adapted from clustergrammerGL for python dash framework by PK
  */
 var cgm = null;
 var defNetwork = {
@@ -10019,7 +10015,7 @@ export default class Cgl extends Component {
         let network;
 
         if(this.props.network == ''){
-          console.log('DEFAULT NETWORK')
+          console.log('empty network')
           // document.getElementById(this.props.id).innerHTML = 'Loading Heatmap'
 
 

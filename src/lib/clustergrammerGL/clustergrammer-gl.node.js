@@ -70309,6 +70309,7 @@ module.exports = function build_control_panel(){
     .style('margin-top','10px')
     .style('top', '37px')
     .style('left', '440px')
+      //added by Phillip, remove searchS
     .style('display', 'none')
 
   let root_id = cgm.params.root.replace('#', '')
