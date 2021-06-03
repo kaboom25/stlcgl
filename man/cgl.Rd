@@ -10,7 +10,8 @@
 }
 
 \usage{
-cgl(id=NULL, label=NULL, value=NULL, network=NULL, divId=NULL)
+cgl(id=NULL, label=NULL, value_rows=NULL, value_cols=NULL,
+network=NULL, divId=NULL)
 }
 
 \arguments{
@@ -18,7 +19,9 @@ cgl(id=NULL, label=NULL, value=NULL, network=NULL, divId=NULL)
 
 \item{label}{Character. }
 
-\item{value}{Character. }
+\item{value_rows}{Character. }
+
+\item{value_cols}{Character. }
 
 \item{network}{Character. added by Phillip
 stringified clustergrammer-gl network object}

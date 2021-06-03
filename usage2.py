@@ -456,7 +456,7 @@ app.layout = html.Div([
                'overflow': 'hidden', 'position': 'fixed'}
     )
 ], className='twelve columns',
-    style={'height': '1600px', 'marginRight': '0'}
+    style={'height': '1600px', 'marginRight': '0', 'zIndex': '1000'}
 
 )
 

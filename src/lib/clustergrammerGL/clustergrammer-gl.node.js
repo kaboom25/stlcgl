@@ -73047,6 +73047,8 @@ module.exports = function find_mouseover_element(regl, params, ev){
   var viz_dim_heat = params.viz_dim.heat;
   var mouseover = params.int.mouseover;
 
+  //adjust axis later Phillip
+
   // reset mouseover params
   _.each(['row', 'col'], function(inst_axis){
     params.int.mouseover[inst_axis] = {};
@@ -77722,8 +77724,14 @@ module.exports = function make_tooltip_text(cgm, external_model){
     //////////////////
     inst_axis = params.tooltip.tooltip_type.split('-')[0];
     make_dendro_tooltip(cgm, external_model, inst_axis);
+    console.log('inst_axis at callback ' + inst_axis)
     //added by Phillip: change state of react comp to include selected clusters
-    cgm.args.dendro_click_callback(cgm.args.reactComp);
+      if(inst_axis == 'row'){
+          cgm.args.dendro_click_callback_rows(cgm.args.reactComp);
+      } else {
+          cgm.args.dendro_click_callback_cols(cgm.args.reactComp);
+      }
+
 
   } else if (params.tooltip.tooltip_type.indexOf('-cat-') > 0){
 

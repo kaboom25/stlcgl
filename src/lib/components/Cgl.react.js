@@ -9984,7 +9984,7 @@ var defNetwork = {
 export default class Cgl extends Component {
     constructor(props) {
         super(props);
-        this.state = { value: [] }
+        this.state = { value_rows: [], value_cols: [] }
     }
 
     createHeatmap() {
@@ -9992,20 +9992,34 @@ export default class Cgl extends Component {
 
       //callbacks
         //called when user clicks on trapezoids.
-        const my_dendro_click_callback = function () {
+        const my_dendro_click_callback_rows = function () {
             if (cgm != null) {
                 //emit event that says dendro was clicked
-                let selectionEvent = new CustomEvent('cluster_selection', { detail: cgm.params.dendro.selected_clust_names })
+                let selectionEvent = new CustomEvent('cluster_selection_rows', { detail: cgm.params.dendro.selected_clust_names })
                 document.getElementById(cgm.args.reactComp.props.id).dispatchEvent(selectionEvent)
             }
         };
+        const my_dendro_click_callback_cols = function () {
+              if (cgm != null) {
+                  //emit event that says dendro was clicked
+                  let selectionEvent = new CustomEvent('cluster_selection_cols', { detail: cgm.params.dendro.selected_clust_names })
+                  document.getElementById(cgm.args.reactComp.props.id).dispatchEvent(selectionEvent)
+              }
+          };
 
         //listener for dendro_click event
-        document.getElementById(this.props.id).addEventListener('cluster_selection',e =>
+        document.getElementById(this.props.id).addEventListener('cluster_selection_rows',e =>
             {
                 // this.setState({ value: e.detail })
-                this.props.setProps({ value: e.detail.toString()})
-                console.log('selected: ' + e.detail.toString())
+                this.props.setProps({ value_rows: e.detail.toString()})
+                console.log('selected rows: ' + e.detail.toString())
+            }
+        )
+        document.getElementById(this.props.id).addEventListener('cluster_selection_cols',e =>
+            {
+                // this.setState({ value: e.detail })
+                this.props.setProps({ value_cols: e.detail.toString()})
+                console.log('selected cols: ' + e.detail.toString())
             }
         )
 
@@ -10031,7 +10045,9 @@ export default class Cgl extends Component {
           args.viz_width=inst_width;
           args.viz_height=inst_height;
           args.reactComp=this;
-          args.dendro_click_callback = my_dendro_click_callback
+          args.dendro_click_callback_rows = my_dendro_click_callback_rows
+          args.dendro_click_callback_cols = my_dendro_click_callback_cols
+
 
           cgm = CGM(args);
         }
@@ -10087,7 +10103,9 @@ Cgl.propTypes = {
 
     label: PropTypes.string,
 
-    value: PropTypes.string,
+    value_rows: PropTypes.string,
+
+    value_cols: PropTypes.string,
 
     /**
      * added by Phillip

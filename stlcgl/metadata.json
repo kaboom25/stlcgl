@@ -26,7 +26,14 @@
         "required": false,
         "description": ""
       },
-      "value": {
+      "value_rows": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": ""
+      },
+      "value_cols": {
         "type": {
           "name": "string"
         },
